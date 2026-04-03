@@ -1,6 +1,6 @@
-# Setup Guide — Getting Team Trip IQ on GitHub Pages
+# Setup Guide — Getting Team Trip HQ on GitHub Pages
 
-Follow these steps to get your own live copy of Team Trip IQ running in about 5 minutes.
+Follow these steps to get your own live copy of Team Trip HQ running in about 5 minutes.
 
 ---
 
@@ -13,7 +13,7 @@ If you don't have one: [github.com/signup](https://github.com/signup)
 ## Step 2 — Create a new repository
 
 1. Go to [github.com/new](https://github.com/new)
-2. **Repository name:** `TeamTripIQ` (or anything you want)
+2. **Repository name:** `TeamTripHQ` (or anything you want)
 3. Set to **Public** ← required for free GitHub Pages
 4. Leave everything else at defaults
 5. Click **Create repository**
@@ -52,7 +52,7 @@ GitHub will show a banner: *"Your site is being published..."*
 After ~60 seconds, your app is live at:
 
 ```
-https://[your-github-username].github.io/TeamTripIQ
+https://[your-github-username].github.io/TeamTripHQ
 ```
 
 Bookmark it, share it with parents, and add it to your iPhone home screen.
@@ -64,7 +64,7 @@ Bookmark it, share it with parents, and add it to your iPhone home screen.
 1. Open the URL in Safari (not Chrome)
 2. Tap the **Share** button (box with arrow)
 3. Scroll down → **Add to Home Screen**
-4. Name it "Trip IQ" → tap **Add**
+4. Name it "Trip HQ" → tap **Add**
 
 It will appear as an icon and open full-screen like a native app.
 
@@ -84,7 +84,7 @@ When there's a new version of `index.html`:
 
 ## Sharing with Parents
 
-Send parents the URL: `https://[username].github.io/TeamTripIQ`
+Send parents the URL: `https://[username].github.io/TeamTripHQ`
 
 Each parent needs their **4-digit PIN** which you set in the app under:
 > Edit mode → Roster → tap a player → Edit → Login PIN
@@ -99,7 +99,7 @@ All data lives in each user's browser (`localStorage`). To back up:
 
 1. Open the app in Chrome on desktop
 2. Press `F12` → **Application** tab → **Local Storage**
-3. Find the key `tripiq4` → right-click → Copy value
+3. Find the key `triphq1` → right-click → Copy value
 4. Paste into a text file and save
 
 To restore: paste the value back into the same localStorage key.

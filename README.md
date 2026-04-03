@@ -1,8 +1,8 @@
-# 🏐 Team Trip IQ
+# 🏐 Team Trip HQ
 
 A mobile-first trip management app for youth volleyball teams. Handles everything from meal orders and parent contacts to duty assignments and supply lists — all in a single HTML file with no backend required.
 
-**Live demo:** `https://[your-username].github.io/TeamTripIQ`
+**Live demo:** `https://[your-username].github.io/TeamTripHQ`
 
 ---
 
@@ -32,7 +32,7 @@ A mobile-first trip management app for youth volleyball teams. Handles everythin
 1. Fork or clone this repo
 2. Go to **Settings → Pages**
 3. Set source to `main` branch, root `/`
-4. Your app will be live at `https://[username].github.io/TeamTripIQ`
+4. Your app will be live at `https://[username].github.io/TeamTripHQ`
 
 ### Run locally
 
@@ -75,7 +75,7 @@ Share the app URL and each parent's 4-digit PIN. They log in and see:
 
 All data is stored in `localStorage` on the user's device. There is no server, no cloud sync, and no data leaves the browser. Clearing browser data or switching devices resets the app to defaults.
 
-To back up data: use the **Export CSV** button on the Roster page, or copy `localStorage['tripiq4']` from browser dev tools.
+To back up data: use the **Export CSV** button on the Roster page, or copy `localStorage['triphq1']` from browser dev tools.
 
 ---
 
@@ -100,7 +100,7 @@ The import adds new people and updates existing ones by name match. It never del
 ## File Structure
 
 ```
-TeamTripIQ/
+TeamTripHQ/
 ├── index.html        ← The entire app (single file)
 ├── README.md         ← This file
 ├── .nojekyll         ← Tells GitHub Pages not to process with Jekyll
