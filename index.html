@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Team Trip IQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07111f;--surface:#0c1d30;--surface2:#112238;--surface3:#0f1e2e;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --gold:#f0b429;--gold-dim:rgba(240,180,41,0.14);
+  --blue:#1a6fff;--blue-dim:rgba(26,111,255,0.12);
+  --green:#22c55e;--green-dim:rgba(34,197,94,0.11);
+  --red:#ef4444;--red-dim:rgba(239,68,68,0.11);
+  --amber:#f59e0b;--muted:#5a7a9a;--muted2:#3a5570;
+  --text:#e8f0ff;--radius:14px;--radius-sm:9px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);}
+body{display:flex;flex-direction:column;}
+#app-header{flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);padding:0 14px;display:flex;align-items:center;gap:8px;height:50px;z-index:50;}
+.hdr-btn{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:5px 9px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.4px;color:var(--gold);white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis;}
+.hdr-chevron{color:var(--muted);font-size:9px;flex-shrink:0;}
+.hdr-spacer{flex:1;}
+#user-btn{display:flex;align-items:center;gap:5px;padding:5px 9px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);}
+#user-btn.logged-in{color:var(--gold);border-color:rgba(240,180,41,.3);}
+#admin-toggle{padding:5px 9px;background:none;border:1px solid var(--border2);border-radius:8px;font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--muted);cursor:pointer;text-transform:uppercase;white-space:nowrap;display:none;}
+#admin-toggle.on{color:var(--gold);border-color:var(--gold);background:var(--gold-dim);}
+#bottom-nav{flex-shrink:0;display:flex;background:var(--surface);border-top:1px solid var(--border);padding:5px 0 max(5px,env(safe-area-inset-bottom));overflow-x:auto;scrollbar-width:none;}
+#bottom-nav::-webkit-scrollbar{display:none;}
+.nav-btn{flex:0 0 auto;min-width:52px;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:4px 6px;font-size:8.5px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);font-family:'Barlow',sans-serif;}
+.nav-btn .ni{font-size:18px;line-height:1;}
+.nav-btn.active{color:var(--gold);}
+#main-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+.page{display:none;padding:13px 13px 24px;max-width:520px;margin:0 auto;}
+.page.active{display:block;}
+.sec-head{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:16px 0 7px;display:flex;align-items:center;gap:8px;}
+.sec-head:first-child{margin-top:0;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;}
+.card-row{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border);}
+.card-row:last-child{border-bottom:none;}
+.card-row.tap{cursor:pointer;transition:background .15s;}
+.card-row.tap:active{background:var(--surface2);}
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:20px;}
+.badge.g{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,.25);}
+.badge.r{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.25);}
+.badge.a{background:rgba(245,158,11,.11);color:var(--amber);border:1px solid rgba(245,158,11,.25);}
+.badge.b{background:var(--blue-dim);color:#60a5fa;border:1px solid rgba(96,165,250,.25);}
+.badge.gd{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(240,180,41,.3);}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:'Barlow',sans-serif;transition:all .15s;}
+.btn-primary{background:var(--blue);color:#fff;}
+.btn-gold{background:var(--gold);color:#07111f;font-weight:700;}
+.btn-ghost{background:none;border:1px solid var(--border2);color:var(--muted);}
+.btn-ghost:active{background:var(--surface2);}
+.btn-danger{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.btn-sm{padding:5px 9px;font-size:11px;}
+.btn-full{width:100%;justify-content:center;}
+.fl{margin-bottom:11px;}
+.fl-lbl{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.fi{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-size:14px;font-family:'Barlow',sans-serif;outline:none;}
+.fi:focus{border-color:var(--blue);}
+.fi::placeholder{color:var(--muted);}
+textarea.fi{resize:vertical;min-height:60px;}
+select.fi{appearance:none;cursor:pointer;}
+/* Info banner */
+.info-banner{background:linear-gradient(135deg,var(--surface2) 0%,rgba(26,111,255,.12) 100%);border:1px solid rgba(26,111,255,.2);border-radius:var(--radius);padding:17px;margin-bottom:13px;position:relative;overflow:hidden;}
+.info-banner::after{content:attr(data-short);position:absolute;right:-6px;bottom:-14px;font-family:'Barlow Condensed',sans-serif;font-size:68px;font-weight:800;color:rgba(255,255,255,.03);pointer-events:none;white-space:nowrap;}
+.info-banner h2{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;letter-spacing:1px;text-transform:uppercase;}
+.info-banner .dates{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);margin-top:3px;}
+.info-banner .venue{font-size:12px;color:rgba(232,240,255,.55);margin-top:8px;line-height:1.5;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.it{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px;}
+.it .tl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:3px;}
+.it .tv{font-size:13px;font-weight:600;line-height:1.4;}
+.it .tv.gd{color:var(--gold);font-family:'JetBrains Mono',monospace;}
+.link-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px;text-decoration:none;color:var(--text);}
+.li-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.li-info{flex:1;min-width:0;}
+.li-info strong{display:block;font-size:13px;font-weight:600;}
+.li-info span{font-size:11px;color:var(--muted);}
+/* Venmo button */
+.venmo-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(135deg,#008CFF 0%,#00B8FF 100%);border-radius:var(--radius);margin-bottom:12px;text-decoration:none;cursor:pointer;}
+.venmo-btn .vb-icon{font-size:24px;}
+.venmo-btn .vb-info .vb-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:.5px;color:#fff;}
+.venmo-btn .vb-info .vb-sub{font-size:11px;color:rgba(255,255,255,.75);margin-top:1px;}
+.venmo-btn .vb-arrow{color:rgba(255,255,255,.6);font-size:18px;margin-left:auto;}
+/* Day groups / meals */
+.day-group{margin-bottom:10px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.day-header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface2);cursor:pointer;user-select:none;}
+.day-header:active{background:var(--surface3);}
+.day-label{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;}
+.day-meta{font-size:11px;color:var(--muted);flex:1;}
+.day-chevron{color:var(--muted);font-size:12px;transition:transform .2s;flex-shrink:0;}
+.day-chevron.open{transform:rotate(180deg);}
+.day-body{display:none;}
+.day-body.open{display:block;}
+.meal-item{border-top:1px solid var(--border);padding:12px 14px;}
+.meal-type-pill{background:var(--gold);color:#07111f;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.4px;padding:2px 9px;border-radius:20px;}
+.order-stats{display:flex;gap:6px;margin-bottom:9px;}
+.stat-chip{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px;text-align:center;}
+.stat-chip .sn{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;line-height:1;}
+.stat-chip .sl{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-top:1px;}
+.stat-chip.s-g .sn{color:var(--green);}
+.stat-chip.s-r .sn{color:var(--red);}
+.stat-chip.s-b .sn{color:#60a5fa;}
+.ezcater-btn{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--gold-dim);border:1px solid rgba(240,180,41,.3);border-radius:var(--radius-sm);margin-bottom:9px;text-decoration:none;}
+.ezcater-btn .ec-main{flex:1;}
+.ezcater-btn .ec-title{font-size:13px;font-weight:700;color:var(--gold);}
+.ezcater-btn .ec-sub{font-size:10px;color:var(--muted);margin-top:1px;}
+.ezcater-btn .ec-arrow{color:var(--gold);font-size:16px;}
+.orders-card{background:var(--surface3);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;}
+.row-sep{display:flex;align-items:center;gap:7px;padding:5px 12px;background:rgba(255,255,255,.02);}
+.row-sep span{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted2);white-space:nowrap;}
+.row-sep::before,.row-sep::after{content:'';flex:1;height:1px;background:var(--border);}
+.order-row{display:flex;align-items:flex-start;gap:9px;padding:9px 12px;border-bottom:1px solid var(--border);}
+.order-row:last-child{border-bottom:none;}
+.or-num{width:28px;height:28px;background:var(--surface2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);flex-shrink:0;}
+.or-body{flex:1;min-width:0;}
+.or-name{font-size:13px;font-weight:600;}
+.or-item{font-size:11px;color:rgba(232,240,255,.65);margin-top:2px;line-height:1.4;}
+.or-note{font-size:10px;color:var(--amber);margin-top:2px;}
+.or-missing{font-size:11px;color:var(--red);font-style:italic;margin-top:2px;}
+/* Budget */
+.budget-row-item{display:flex;align-items:center;padding:11px 14px;border-bottom:1px solid var(--border);}
+.budget-row-item:last-child{border-bottom:none;}
+.bri-left{flex:1;}
+.bri-name{font-size:13px;font-weight:600;}
+.bri-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.bri-amt{font-family:'JetBrains Mono',monospace;font-size:13px;}
+/* Roster */
+.roster-row{display:flex;align-items:center;gap:10px;padding:10px 13px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+.roster-row:last-child{border-bottom:none;}
+.roster-row:active{background:var(--surface2);}
+.r-av{width:37px;height:37px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold);flex-shrink:0;}
+.r-info{flex:1;min-width:0;}
+.r-name{font-size:13px;font-weight:600;}
+.r-sub{font-size:11px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.r-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.r-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);}
+/* Player + Attendee cards */
+.plyr-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;}
+.plyr-hdr{display:flex;align-items:center;gap:12px;padding:13px 14px 11px;}
+.plyr-num{width:40px;height:40px;border-radius:10px;background:var(--surface2);border:1.5px solid var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--gold);flex-shrink:0;}
+.plyr-info{flex:1;min-width:0;}
+.plyr-name{font-size:16px;font-weight:700;line-height:1.2;}
+.plyr-sub{font-size:11px;color:var(--muted);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap;}
+.plyr-badges{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+/* Attendee section */
+.attendees-section{border-top:1px solid var(--border);}
+.attendee-lbl{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);padding:8px 14px 4px;background:rgba(255,255,255,.02);}
+.attendee-row{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);}
+.attendee-row:last-child{border-bottom:none;}
+.att-av{width:36px;height:36px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--muted2);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--muted);flex-shrink:0;margin-top:1px;}
+.att-body{flex:1;min-width:0;}
+.att-name{font-size:14px;font-weight:700;}
+.att-rel{font-size:11px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:1px;}
+.att-contacts{display:flex;flex-direction:column;gap:4px;margin-top:6px;}
+.att-contact{display:flex;align-items:center;gap:7px;}
+.att-contact-icon{font-size:12px;width:18px;text-align:center;flex-shrink:0;}
+.att-contact-val{font-size:12px;color:rgba(232,240,255,.75);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;}
+.att-contact-action{flex-shrink:0;}
+.att-car{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--blue);background:var(--blue-dim);border:1px solid rgba(96,165,250,.2);border-radius:20px;padding:2px 8px;margin-top:5px;}
+.att-actions{display:flex;flex-direction:column;gap:4px;flex-shrink:0;align-items:flex-end;}
+/* add-attendee row */
+.add-att-btn{display:flex;align-items:center;gap:8px;padding:9px 14px;cursor:pointer;color:var(--muted);font-size:13px;border-top:1px solid var(--border);transition:background .15s;}
+.add-att-btn:active{background:var(--surface2);}
+/* download bar */
+.download-bar{display:flex;align-items:center;gap:8px;padding:12px 0 4px;}
+.download-bar .db-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);flex:1;}
+/* Google Sheets sync */
+.gs-panel{background:var(--surface2);border:1px solid rgba(52,168,83,.2);border-radius:var(--radius);padding:14px;margin-bottom:14px;}
+.gs-panel-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#34a853;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.gs-status{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;}
+.gs-status.ok{color:var(--green);}
+.gs-status.err{color:var(--red);}
+.gs-how{background:var(--surface3);border-radius:9px;padding:11px 13px;margin-top:10px;font-size:12px;color:rgba(232,240,255,.6);line-height:1.7;}
+/* Duties */
+.duty-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;}
+.duty-hdr-row{display:flex;align-items:center;gap:10px;padding:14px 14px 10px;}
+.duty-icon-el{width:38px;height:38px;border-radius:10px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.duty-title{font-size:15px;font-weight:700;flex:1;}
+.duty-notes-row{padding:0 14px 8px;font-size:12px;color:rgba(232,240,255,.55);line-height:1.5;}
+.duty-assignees{padding:0 14px 12px;display:flex;flex-direction:column;gap:6px;}
+.assignee-row{display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:10px;padding:10px 12px;}
+.assignee-av{width:34px;height:34px;border-radius:50%;background:var(--surface3);border:1.5px solid var(--muted2);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--muted);flex-shrink:0;}
+.assignee-name{font-size:14px;font-weight:700;flex:1;}
+.assignee-phone{font-size:12px;color:var(--muted);}
+/* Supplies */
+.supply-cat-hdr{display:flex;align-items:center;gap:8px;margin:14px 0 6px;}
+.supply-cat-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold);flex:1;}
+.supply-row{display:flex;align-items:center;gap:10px;padding:10px 13px;border-bottom:1px solid var(--border);}
+.supply-row:last-child{border-bottom:none;}
+.supply-chk{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border2);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;color:transparent;font-size:12px;}
+.supply-chk.done{background:var(--green);border-color:var(--green);color:#fff;}
+.supply-n{flex:1;font-size:13px;font-weight:500;}
+.supply-n.done{text-decoration:line-through;color:var(--muted);}
+.supply-a{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);}
+/* Dashboard */
+.dash-greeting{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;letter-spacing:.5px;margin-bottom:14px;}
+.dash-team-pill{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:10px 14px;margin-bottom:10px;cursor:pointer;}
+.dash-team-pill .tp-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--gold);flex:1;}
+.dash-team-pill .tp-ev{font-size:11px;color:var(--muted);}
+.alert-card{background:var(--red-dim);border:1px solid rgba(239,68,68,.25);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;}
+.alert-card .alert-title{font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--red);margin-bottom:8px;}
+.alert-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(239,68,68,.15);display:flex;align-items:flex-start;gap:7px;}
+.alert-item:last-child{border-bottom:none;}
+.dash-order-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:9px;}
+.dash-order-card .doc-meal{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
+.dash-order-card .doc-rest{font-size:15px;font-weight:700;margin-bottom:2px;}
+.dash-order-card .doc-item{font-size:13px;color:rgba(232,240,255,.7);margin-top:4px;line-height:1.5;}
+.dash-order-card .doc-note{font-size:11px;color:var(--amber);margin-top:4px;}
+/* Login */
+#login-screen{position:fixed;inset:0;background:var(--bg);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+.login-logo{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:800;letter-spacing:2px;color:var(--gold);margin-bottom:4px;}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:28px;text-align:center;line-height:1.5;}
+.login-box{width:100%;max-width:320px;background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:22px;}
+.pin-dots{display:flex;justify-content:center;gap:12px;margin:16px 0;}
+.pin-dot{width:14px;height:14px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border2);transition:all .2s;}
+.pin-dot.filled{background:var(--gold);border-color:var(--gold);}
+.pin-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.pin-key{background:var(--surface2);border:1px solid var(--border2);border-radius:11px;padding:13px;font-size:20px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s;font-family:'Barlow Condensed',sans-serif;color:var(--text);}
+.pin-key:active{background:var(--blue);border-color:var(--blue);}
+.pin-key.del{font-size:14px;color:var(--muted);}
+/* Sessions */
+.session-bar{background:rgba(240,180,41,.08);border:1px solid rgba(240,180,41,.2);border-radius:10px;padding:8px 12px;margin-top:12px;font-size:11px;color:var(--muted);text-align:center;line-height:1.5;}
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+.sheet{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding-bottom:max(20px,env(safe-area-inset-bottom));animation:slideUp .22s ease;}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sh-handle{width:38px;height:4px;background:var(--border2);border-radius:2px;margin:10px auto 16px;}
+.sh-body{padding:0 18px;}
+.sh-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:15px;}
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
+.confirm-overlay.open{display:flex;}
+.confirm-box{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:22px;max-width:310px;width:100%;text-align:center;}
+.confirm-box h3{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px;}
+.confirm-box p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+.confirm-btns{display:flex;gap:8px;}
+#toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--surface2);border:1px solid var(--border2);border-radius:30px;padding:8px 18px;font-size:13px;font-weight:500;z-index:500;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.empty-msg{text-align:center;padding:22px;color:var(--muted);font-size:13px;}
+/* Multi-select checkboxes for duty assignment */
+.person-check-list{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto;}
+.person-check-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--surface2);border-radius:9px;cursor:pointer;border:1px solid transparent;}
+.person-check-item.selected{border-color:var(--gold);background:var(--gold-dim);}
+.person-check-item .pci-av{width:30px;height:30px;border-radius:50%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:var(--muted);flex-shrink:0;}
+.person-check-item .pci-name{font-size:13px;font-weight:600;flex:1;}
+.person-check-item .pci-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.person-check-item.selected .pci-check{background:var(--gold);border-color:var(--gold);color:#07111f;font-weight:900;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-logo">TRIP IQ</div>
+  <div class="login-sub">Enter your 4-digit PIN<br>to access your trip dashboard</div>
+  <div class="login-box">
+    <div style="text-align:center;font-size:13px;font-weight:600;color:var(--muted);min-height:18px;" id="login-hint"></div>
+    <div class="pin-dots" id="pin-dots"><div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div><div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div></div>
+    <div id="pin-error" style="text-align:center;font-size:12px;color:var(--red);height:16px;margin-bottom:8px;"></div>
+    <div class="pin-keypad">
+      <div class="pin-key" onclick="pinPress('1')">1</div>
+      <div class="pin-key" onclick="pinPress('2')">2</div>
+      <div class="pin-key" onclick="pinPress('3')">3</div>
+      <div class="pin-key" onclick="pinPress('4')">4</div>
+      <div class="pin-key" onclick="pinPress('5')">5</div>
+      <div class="pin-key" onclick="pinPress('6')">6</div>
+      <div class="pin-key" onclick="pinPress('7')">7</div>
+      <div class="pin-key" onclick="pinPress('8')">8</div>
+      <div class="pin-key" onclick="pinPress('9')">9</div>
+      <div class="pin-key" style="opacity:0;pointer-events:none"></div>
+      <div class="pin-key" onclick="pinPress('0')">0</div>
+      <div class="pin-key del" onclick="pinPress('⌫')">⌫</div>
+    </div>
+    <div style="text-align:center;margin-top:12px;"><button class="btn btn-ghost btn-sm" onclick="showAdminHint()">Admin / Coach →</button></div>
+    <div class="session-bar">Your login is saved on this device.<br>You won't need to re-enter next time.</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div id="app-header">
+  <button class="hdr-btn" onclick="openSheet('team-sheet')"><span id="hdr-tn">—</span><span class="hdr-chevron">▼</span></button>
+  <button class="hdr-btn" onclick="openSheet('event-sheet')"><span id="hdr-en">—</span><span class="hdr-chevron">▼</span></button>
+  <div class="hdr-spacer"></div>
+  <button id="admin-toggle" onclick="toggleAdmin()">Edit</button>
+  <button id="user-btn" onclick="handleUserBtn()">👤 <span id="user-label">Login</span></button>
+</div>
+
+<!-- MAIN -->
+<div id="main-scroll">
+  <div class="page active" id="page-dash"><div id="dash-content"></div></div>
+  <div class="page" id="page-info">
+    <div class="info-banner" id="info-banner" data-short=""><div class="dates" id="ev-dates"></div><h2 id="ev-name"></h2><div class="venue" id="ev-venue"></div></div>
+    <div class="info-grid">
+      <div class="it"><div class="tl">Arrive By</div><div class="tv gd" id="ev-arrive"></div></div>
+      <div class="it"><div class="tl">Team</div><div class="tv" id="ev-size"></div></div>
+      <div class="it"><div class="tl">Hotel</div><div class="tv" id="ev-hotel"></div></div>
+      <div class="it"><div class="tl">Emergency Contact</div><div class="tv" id="ev-emergency"></div></div>
+    </div>
+    <div id="venmo-section"></div>
+    <div class="sec-head">📋 Reminders</div>
+    <div class="card"><div class="card-row"><span id="ev-notes" style="font-size:13px;line-height:1.7;"></span></div></div>
+    <div class="sec-head">🔗 Quick Links</div>
+    <div id="links-list"></div>
+    <div id="admin-links-add" style="display:none;margin-top:6px;"><button class="btn btn-ghost btn-sm btn-full" onclick="openSheet('add-link-sh')">+ Add Link</button></div>
+    <div id="admin-info-edit" style="display:none;margin-top:10px;"><button class="btn btn-ghost btn-sm btn-full" onclick="openSheet('edit-event-sh')">✏️ Edit Event Details</button></div>
+  </div>
+  <div class="page" id="page-meals"><div id="days-list"></div><div id="admin-meal-add" style="display:none;margin-top:4px;"><button class="btn btn-ghost btn-sm btn-full" onclick="openSheet('add-meal-sh')">+ Add Meal</button></div></div>
+  <div class="page" id="page-budget">
+    <div style="display:flex;gap:8px;margin-bottom:13px;" id="budget-top"></div>
+    <div id="admin-budget-edit" style="display:none;margin-bottom:10px;"><button class="btn btn-ghost btn-sm btn-full" onclick="openSheet('edit-budget-sh')">✏️ Edit Budget Settings</button></div>
+    <div class="sec-head">Meal Expenses</div><div class="card" id="budget-expenses"></div>
+    <div class="sec-head">💳 Payments <span id="paid-badge" class="badge g" style="margin-left:auto"></span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;" id="pay-grid"></div>
+  </div>
+  <div class="page" id="page-players">
+    <div class="download-bar">
+      <span class="db-title">Roster</span>
+      <button class="btn btn-ghost btn-sm" onclick="exportToCSV()">⬇️ Export CSV</button>
+      <button class="btn btn-ghost btn-sm" onclick="openSheet('gs-sheet')">📊 Import</button>
+    </div>
+    <div class="sec-head">Players</div>
+    <div id="roster-players"></div>
+    <div class="sec-head">Coaches</div>
+    <div id="roster-coaches"></div>
+    <div id="admin-roster-add" style="display:none;margin-top:7px;"><div style="display:flex;gap:7px;"><button class="btn btn-ghost btn-sm" style="flex:1" onclick="openAddPersonSheet('player')">+ Player</button><button class="btn btn-ghost btn-sm" style="flex:1" onclick="openAddPersonSheet('coach')">+ Coach</button></div></div>
+  </div>
+  <div class="page" id="page-duties">
+    <div class="sec-head">🔴 Unassigned Duties</div><div id="duties-unassigned"></div>
+    <div class="sec-head">✅ Assigned Duties</div><div id="duties-assigned"></div>
+    <div id="admin-duty-add" style="display:none;margin-top:6px;"><button class="btn btn-ghost btn-sm btn-full" onclick="openNewDutySheet()">+ Add Duty</button></div>
+  </div>
+  <div class="page" id="page-supplies"><div class="card" style="margin-bottom:12px;"><div class="card-row"><span id="supply-notes-txt" style="font-size:13px;line-height:1.65;color:rgba(232,240,255,.7)"></span></div></div><div id="supplies-list"></div><div id="admin-supply-add" style="display:none;margin-top:6px;"><button class="btn btn-ghost btn-sm btn-full" onclick="openSheet('add-supply-sh')">+ Add Item</button></div></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div id="bottom-nav">
+  <button class="nav-btn active" onclick="switchPage('dash',this)"><div class="ni">🏠</div>Home</button>
+  <button class="nav-btn" onclick="switchPage('info',this)"><div class="ni">ℹ️</div>Info</button>
+  <button class="nav-btn" onclick="switchPage('meals',this)"><div class="ni">🍽️</div>Meals</button>
+  <button class="nav-btn" onclick="switchPage('budget',this)"><div class="ni">💰</div>Budget</button>
+  <button class="nav-btn" onclick="switchPage('players',this)"><div class="ni">🏐</div>Roster</button>
+  <button class="nav-btn" onclick="switchPage('duties',this)"><div class="ni">📋</div>Duties</button>
+  <button class="nav-btn" onclick="switchPage('supplies',this)"><div class="ni">🛒</div>Supplies</button>
+</div>
+<div id="toast"></div>
+
+<!-- ═══ SHEETS ═══ -->
+<div class="overlay" id="team-sheet" onclick="oc(event,'team-sheet')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">My Teams</div><div class="card" id="team-list" style="margin-bottom:11px;"></div><button class="btn btn-ghost btn-full" onclick="openSheet('add-team-sh');closeSheet('team-sheet')">+ New Team</button></div></div></div>
+<div class="overlay" id="add-team-sh" onclick="oc(event,'add-team-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">New Team</div><div class="fl"><div class="fl-lbl">Team Name</div><input class="fi" id="nt-name" placeholder="e.g. 16 Gold"></div><button class="btn btn-primary btn-full" onclick="addTeam()">Create Team</button></div></div></div>
+<div class="overlay" id="event-sheet" onclick="oc(event,'event-sheet')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Events</div><div class="card" id="event-list" style="margin-bottom:11px;"></div><div style="display:flex;gap:7px;"><button class="btn btn-ghost" style="flex:1" onclick="openSheet('add-event-sh');closeSheet('event-sheet')">+ New Event</button><button class="btn btn-ghost" style="flex:1" onclick="openSheet('clone-event-sh');closeSheet('event-sheet')">📋 Clone Trip</button></div></div></div></div>
+<div class="overlay" id="add-event-sh" onclick="oc(event,'add-event-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">New Event</div><div class="fl"><div class="fl-lbl">Event Name</div><input class="fi" id="ne-name" placeholder="e.g. Arizona Open 2026"></div><div class="fl"><div class="fl-lbl">Short Label</div><input class="fi" id="ne-short" placeholder="e.g. AZ 2026"></div><div class="fl"><div class="fl-lbl">Dates</div><input class="fi" id="ne-dates" placeholder="e.g. JAN 16–18, 2026"></div><div class="fl"><div class="fl-lbl">Venue</div><input class="fi" id="ne-venue" placeholder="Convention Center, City, State"></div><div class="fl"><div class="fl-lbl">Hotel</div><input class="fi" id="ne-hotel" placeholder="e.g. Sheraton Phoenix Downtown"></div><button class="btn btn-primary btn-full" onclick="addEvent()">Create Event</button></div></div></div>
+<div class="overlay" id="edit-event-sh" onclick="oc(event,'edit-event-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Edit Event Details</div><div class="fl"><div class="fl-lbl">Event Name</div><input class="fi" id="ee-name"></div><div class="fl"><div class="fl-lbl">Short Label</div><input class="fi" id="ee-short"></div><div class="fl"><div class="fl-lbl">Dates</div><input class="fi" id="ee-dates"></div><div class="fl"><div class="fl-lbl">Venue</div><textarea class="fi" id="ee-venue"></textarea></div><div class="fl"><div class="fl-lbl">Arrive By</div><input class="fi" id="ee-arrive"></div><div class="fl"><div class="fl-lbl">Hotel</div><input class="fi" id="ee-hotel"></div><div class="fl"><div class="fl-lbl">EZ Cater Phone</div><input class="fi" id="ee-ezcater-ph" placeholder="800-488-1803"></div><div class="fl"><div class="fl-lbl">Emergency Contact Name</div><input class="fi" id="ee-emerg-name" placeholder="e.g. Coach Pat Eaton"></div><div class="fl"><div class="fl-lbl">Emergency Contact Phone</div><input class="fi" id="ee-emerg-phone" type="tel" placeholder="949-555-0000"></div><div class="fl"><div class="fl-lbl">Venmo Handle (without @)</div><input class="fi" id="ee-venmo" placeholder="e.g. TeamBlues-Treasurer"></div><div class="fl"><div class="fl-lbl">Amount Due per Player ($)</div><input class="fi" id="ee-per-player" type="number" placeholder="50"></div><div class="fl"><div class="fl-lbl">Reminders / Notes</div><textarea class="fi" id="ee-notes"></textarea></div><div class="fl"><div class="fl-lbl">Supply List Notes</div><textarea class="fi" id="ee-supply-notes"></textarea></div><button class="btn btn-primary btn-full" onclick="saveEventDetails()">Save Changes</button></div></div></div>
+<div class="overlay" id="edit-budget-sh" onclick="oc(event,'edit-budget-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Budget Settings</div><div class="fl"><div class="fl-lbl">Amount Due Per Player ($)</div><input class="fi" id="eb-per-player" type="number" placeholder="50"></div><div class="fl"><div class="fl-lbl">Venmo Handle (without @)</div><input class="fi" id="eb-venmo" placeholder="e.g. TeamBlues-Treasurer"></div><button class="btn btn-primary btn-full" onclick="saveBudgetSettings()">Save</button></div></div></div>
+<div class="overlay" id="clone-event-sh" onclick="oc(event,'clone-event-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Clone Trip</div><div style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">Creates a new event with the same roster, duties, and supplies. Meals start fresh.</div><div class="fl"><div class="fl-lbl">New Event Name</div><input class="fi" id="cl-name" placeholder="e.g. Chicago Open 2026"></div><div class="fl"><div class="fl-lbl">Short Label</div><input class="fi" id="cl-short" placeholder="e.g. CHI 2026"></div><div class="fl"><div class="fl-lbl">Dates</div><input class="fi" id="cl-dates" placeholder=""></div><div class="fl"><div class="fl-lbl">Venue</div><input class="fi" id="cl-venue" placeholder=""></div><div class="fl"><div class="fl-lbl">Copy</div><label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="cl-roster" checked> Roster (players &amp; coaches)</label><label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="cl-duties" checked> Duties (unassigned)</label><label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;"><input type="checkbox" id="cl-supplies" checked> Supplies list</label></div><button class="btn btn-gold btn-full" onclick="cloneEvent()">Clone Trip →</button></div></div></div>
+<div class="overlay" id="person-sheet" onclick="oc(event,'person-sheet')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body" id="person-sh-body"></div></div></div>
+<div class="overlay" id="add-person-sh" onclick="oc(event,'add-person-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title" id="ap-title">Add Player</div><input type="hidden" id="ap-role"><input type="hidden" id="ap-idx" value="-1"><div class="fl"><div class="fl-lbl">Full Name</div><input class="fi" id="ap-name" placeholder="First Last"></div><div class="fl"><div class="fl-lbl">Jersey # (players)</div><input class="fi" id="ap-num" type="number"></div><div class="fl"><div class="fl-lbl">Parent / Contact Name(s)</div><input class="fi" id="ap-parents" placeholder="e.g. Linda & Rob Bae"></div><div class="fl"><div class="fl-lbl">Phone 1</div><input class="fi" id="ap-p1" type="tel"></div><div class="fl"><div class="fl-lbl">Phone 2</div><input class="fi" id="ap-p2" type="tel"></div><div class="fl"><div class="fl-lbl">Email</div><input class="fi" id="ap-email" type="email" placeholder="parent@email.com"></div><div class="fl"><div class="fl-lbl">Allergies</div><input class="fi" id="ap-allergy" placeholder="None"></div><div class="fl"><div class="fl-lbl">Hotel</div><input class="fi" id="ap-hotel"></div><div class="fl"><div class="fl-lbl">Login PIN (4 digits)</div><input class="fi" id="ap-pin" type="tel" maxlength="4" placeholder="e.g. 2312"></div><div style="display:flex;gap:14px;margin-bottom:12px;"><label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" id="ap-paid"> Paid</label><label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" id="ap-car"> Has Car</label></div><button class="btn btn-primary btn-full" onclick="savePerson()">Save</button></div></div></div>
+<div class="overlay" id="add-meal-sh" onclick="oc(event,'add-meal-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title" id="am-title">Add Meal</div><input type="hidden" id="am-idx" value="-1"><div class="fl"><div class="fl-lbl">Date Key (for grouping)</div><input class="fi" id="am-date" placeholder="e.g. 2026-01-17"></div><div class="fl"><div class="fl-lbl">Day Label</div><input class="fi" id="am-daylabel" placeholder="e.g. Saturday Jan 17"></div><div class="fl"><div class="fl-lbl">Meal Type</div><select class="fi" id="am-type"><option>Breakfast</option><option>Lunch</option><option selected>Dinner</option><option>Team Dinner</option><option>Snack</option></select></div><div class="fl"><div class="fl-lbl">Restaurant</div><input class="fi" id="am-rest" placeholder="e.g. Qdoba"></div><div class="fl"><div class="fl-lbl">Time</div><input class="fi" id="am-time" placeholder="e.g. 5:00 PM delivery"></div><div class="fl"><div class="fl-lbl">Location</div><input class="fi" id="am-loc" placeholder="e.g. Convention Center"></div><div class="fl"><div class="fl-lbl">EZ Cater Link</div><input class="fi" id="am-ez" placeholder="https://www.ezcater.com/..."></div><div class="fl"><div class="fl-lbl">Coordinator</div><input class="fi" id="am-vol"></div><div class="fl"><div class="fl-lbl">Estimated Cost ($)</div><input class="fi" id="am-cost" type="number" placeholder="0"></div><div class="fl"><div class="fl-lbl">Notes</div><textarea class="fi" id="am-notes"></textarea></div><button class="btn btn-primary btn-full" onclick="saveMeal()">Save Meal</button></div></div></div>
+<div class="overlay" id="add-order-sh" onclick="oc(event,'add-order-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title" id="ao-title">Add Order</div><input type="hidden" id="ao-meal"><input type="hidden" id="ao-idx" value="-1"><div class="fl"><div class="fl-lbl">Person</div><input class="fi" id="ao-name"></div><div class="fl"><div class="fl-lbl">Jersey #</div><input class="fi" id="ao-num" type="number"></div><div class="fl"><div class="fl-lbl">Order / Item</div><textarea class="fi" id="ao-item"></textarea></div><div class="fl"><div class="fl-lbl">Customization / Notes</div><input class="fi" id="ao-note"></div><div style="display:flex;gap:8px;"><button class="btn btn-primary" style="flex:1" onclick="saveOrder()">Save Order</button><button class="btn btn-danger btn-sm" id="ao-del-btn" style="display:none" onclick="confirmDeleteOrder()">Delete</button></div></div></div></div>
+<div class="overlay" id="add-duty-sh" onclick="oc(event,'add-duty-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title" id="ad-title">Add Duty</div><input type="hidden" id="ad-idx" value="-1"><div class="fl"><div class="fl-lbl">Duty Name</div><input class="fi" id="ad-name"></div><div class="fl"><div class="fl-lbl">Icon (emoji)</div><input class="fi" id="ad-icon" maxlength="4" placeholder="📋"></div><div class="fl"><div class="fl-lbl">Notes / Instructions</div><textarea class="fi" id="ad-notes"></textarea></div><div class="fl"><div class="fl-lbl">Assign To (select multiple)</div><div class="person-check-list" id="duty-person-list"></div></div><button class="btn btn-primary btn-full" style="margin-top:12px;" onclick="saveDuty()">Save Duty</button></div></div></div>
+<div class="overlay" id="add-supply-sh" onclick="oc(event,'add-supply-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Add Supply Item</div><div class="fl"><div class="fl-lbl">Category</div><input class="fi" id="ns-cat" placeholder="e.g. Drinks, Snacks, Fruit"></div><div class="fl"><div class="fl-lbl">Item Name</div><input class="fi" id="ns-name"></div><div class="fl"><div class="fl-lbl">Amount</div><input class="fi" id="ns-amt" placeholder="e.g. 4 cases"></div><button class="btn btn-primary btn-full" onclick="addSupply()">Add Item</button></div></div></div>
+<div class="overlay" id="edit-cat-sh" onclick="oc(event,'edit-cat-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Edit Category</div><div class="fl"><div class="fl-lbl">Category Name</div><input class="fi" id="ec-old-name" type="hidden"><input class="fi" id="ec-new-name" placeholder="Category name"></div><button class="btn btn-primary btn-full" onclick="saveCategory()">Save Category Name</button></div></div></div>
+<div class="overlay" id="add-link-sh" onclick="oc(event,'add-link-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Add Quick Link</div><div class="fl"><div class="fl-lbl">Label</div><input class="fi" id="nl-label"></div><div class="fl"><div class="fl-lbl">URL</div><input class="fi" id="nl-url" type="url" placeholder="https://"></div><div class="fl"><div class="fl-lbl">Icon</div><input class="fi" id="nl-icon" maxlength="4" placeholder="📅"></div><div class="fl"><div class="fl-lbl">Subtitle</div><input class="fi" id="nl-sub"></div><button class="btn btn-primary btn-full" onclick="addLink()">Add Link</button></div></div></div>
+<div class="overlay" id="add-att-sh" onclick="oc(event,'add-att-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body">
+  <div class="sh-title" id="aa-title">Add Attendee</div>
+  <input type="hidden" id="aa-player-idx">
+  <input type="hidden" id="aa-player-role">
+  <input type="hidden" id="aa-att-idx" value="-1">
+  <div class="fl"><div class="fl-lbl">Name</div><input class="fi" id="aa-name" placeholder="e.g. Linda Bae"></div>
+  <div class="fl"><div class="fl-lbl">Relationship</div>
+    <select class="fi" id="aa-rel">
+      <option>Mom</option><option>Dad</option><option>Guardian</option>
+      <option>Grandparent</option><option>Sibling</option><option>Spectator</option><option>Other</option>
+    </select>
+  </div>
+  <div class="fl"><div class="fl-lbl">Phone</div><input class="fi" id="aa-phone" type="tel" placeholder="949-555-0000"></div>
+  <div class="fl"><div class="fl-lbl">Email</div><input class="fi" id="aa-email" type="email" placeholder="parent@email.com"></div>
+  <div class="fl"><div class="fl-lbl">Hotel</div><input class="fi" id="aa-hotel" placeholder="e.g. Sheraton Phoenix"></div>
+  <label style="display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer;margin-bottom:14px;">
+    <input type="checkbox" id="aa-car" style="width:16px;height:16px;"> Has a car at the event
+  </label>
+  <div style="display:flex;gap:8px;">
+    <button class="btn btn-primary" style="flex:1" onclick="saveAttendee()">Save</button>
+    <button class="btn btn-danger btn-sm" id="aa-del-btn" style="display:none" onclick="deleteAttendee()">Remove</button>
+  </div>
+</div></div></div>
+<div class="overlay" id="gs-sheet" onclick="oc(event,'gs-sheet')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body">
+  <div class="sh-title">Google Sheets Sync</div>
+  <div class="gs-how">
+    <strong style="color:var(--text)">How to connect your Sheet:</strong><br>
+    1. Open your Google Sheet<br>
+    2. File → Share → Publish to web<br>
+    3. Choose the sheet tab → CSV format<br>
+    4. Copy the URL and paste below<br>
+    5. Your sheet must have columns: <span style="color:var(--gold)">Name, Number, Parents, Phone1, Phone2, Email, Allergy, Hotel, Paid, PIN</span>
+  </div>
+  <div style="margin-top:14px;" class="fl"><div class="fl-lbl">Published CSV URL</div><input class="fi" id="gs-url" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv" type="url"></div>
+  <div class="fl"><div class="fl-lbl">Import As</div><select class="fi" id="gs-role"><option value="player">Players</option><option value="coach">Coaches</option></select></div>
+  <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:9px;padding:11px;font-size:12px;color:var(--amber);line-height:1.6;margin-bottom:14px;">⚠️ Import will <strong>add or update</strong> matching names. Existing orders and duties are preserved. It will not delete anyone already in the roster.</div>
+  <button class="btn btn-primary btn-full" onclick="importFromSheet()">Import from Google Sheets</button>
+  <div id="gs-status" class="gs-status" style="margin-top:10px;text-align:center;"></div>
+  <div style="height:16px;"></div>
+  <div style="border-top:1px solid var(--border);padding-top:14px;">
+    <div class="fl-lbl" style="margin-bottom:8px;">Export Current Roster</div>
+    <button class="btn btn-ghost btn-full" onclick="exportToCSV()">⬇️ Download Roster as CSV</button>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center">Open in Google Sheets via File → Import</div>
+  </div>
+</div></div></div>
+<div class="confirm-overlay" id="confirm-overlay"><div class="confirm-box"><h3 id="conf-title">Are you sure?</h3><p id="conf-msg"></p><div class="confirm-btns"><button class="btn btn-ghost" style="flex:1" onclick="closeConfirm()">Cancel</button><button class="btn btn-danger" style="flex:1" id="conf-ok">Delete</button></div></div></div>
+
+<script>
+// ── DEFAULT DATA ──
+const SEED = {activeTeam:0,activeEvent:0,adminOn:false,currentUser:null,teams:[{name:"14 Blues",events:[{name:"Arizona Open 2026",short:"AZ 2026",dates:"JAN 16–18, 2026",venue:"Phoenix Convention Center\n100 N. 3rd St, Phoenix AZ 85004",arrive:"Friday 1/16",hotel:"See confirmation email",ezCaterPhone:"800-488-1803",venmo:"",notes:"• Players fly or drive with parents\n• No team laundry for this event\n• Players on their own for snacks\n• $50/player meal fee via Venmo",supplyNotes:"• Order more Gatorade than last time\n• Only one bag of oranges needed",budget:{perPlayer:50},links:[{label:"Tournament Schedule",url:"#",icon:"📅",sub:"View bracket & times"},{label:"Buy Tickets",url:"#",icon:"🎫",sub:"Phoenix Convention Center"},{label:"Directions to Venue",url:"https://maps.google.com/?q=Phoenix+Convention+Center",icon:"🗺️",sub:"Google Maps"}],meals:[{date:"2026-01-17",dayLabel:"Saturday Jan 17",type:"Dinner",restaurant:"Qdoba",time:"5:00 PM delivery",loc:"Phoenix Convention Center",ezCaterLink:"https://www.ezcater.com/catering/qdoba-70/",volunteer:"Linda Bae",estimatedCost:295,notes:"",orders:[{name:"Julian Bae",num:17,item:"Brisket Birria Burrito Box, Roasted Tomato Salsa, Brownie",note:""},{name:"Hudson Baldwin",num:2,item:"Chicken Burrito Boxed Lunch",note:"No pico de gallo"},{name:"Evan Barrientos",num:11,item:"Chicken & Queso Burrito Box, Brownie",note:"No black beans, no pico de gallo"},{name:"Baron Cortes",num:1,item:"Steak & Queso Burrito Boxed Lunch",note:"No salsa"},{name:"Sam Eastman",num:25,item:"Chicken Burrito Boxed Lunch",note:"Chicken and rice only"},{name:"Julian Ebbert",num:13,item:"Steak & Queso Burrito Box",note:""},{name:"Zac Kahlon",num:12,item:"Steak Burrito Boxed Lunch",note:"Steak, rice, pico only — no cheese or beans"},{name:"Jack Martinez",num:19,item:"Chicken Burrito Boxed Lunch",note:""},{name:"Kaua Pimenta",num:21,item:"Pork Carnitas Burrito Boxed Lunch, Cookie",note:""},{name:"Jack Preus",num:5,item:"Chicken Burrito Boxed Lunch, Cookie",note:"No pico de gallo"},{name:"Dean Wagner",num:42,item:"Steak & Queso Burrito Boxed Lunch, Roasted Tomato Salsa, Brownie",note:""},{name:"Soren Wright",num:23,item:"Chicken Burrito Boxed Lunch, Salsa Verde, Brownie",note:"Chicken and rice only"},{name:"Coach Pat Eaton",num:null,item:"Steak Burrito",note:""},{name:"Coach Sherri Fenn",num:null,item:"Chicken Burrito Boxed Lunch, Salsa Verde",note:""},{name:"Coach Dylan Rubio",num:null,item:"Brisket Birria Burrito Boxed Lunch, Roasted Tomato Salsa, Cookie",note:""}]},{date:"2026-01-18",dayLabel:"Sunday Jan 18",type:"Dinner",restaurant:"Jimmy John's",time:"5:00 PM delivery",loc:"Phoenix Convention Center",ezCaterLink:"https://www.ezcater.com/catering/jimmy-johns-phoenix-5",volunteer:"Kerri Baldwin",estimatedCost:170,notes:"",orders:[{name:"Julian Bae",num:17,item:"#5 Perfect Italian, French Bread, BBQ Chips, Brownie",note:""},{name:"Hudson Baldwin",num:2,item:"#4 Turkey Breast, French Bread, BBQ Chips, Choc Chip Cookie",note:"No tomatoes"},{name:"Evan Barrientos",num:11,item:"Sicilian Pizza Sandwich, Choc Chip Cookie, Jimmy Chips",note:""},{name:"Baron Cortes",num:1,item:"#4 Turkey Breast, French Bread, BBQ Chips, Choc Chip Cookie",note:""},{name:"Sam Eastman",num:25,item:"#4 Turkey, French Bread, S&V Chips, Choc Chip Cookie",note:"Turkey and bread only"},{name:"Julian Ebbert",num:13,item:"#13 Jimmy Cubano, Cookie, BBQ Chips",note:""},{name:"Zac Kahlon",num:12,item:"#14 Roast Beef & Turkey",note:"No mayo, Unwich (no bread)"},{name:"Jack Martinez",num:19,item:"Original Box Lunch: JJBLT, French Bread, S&V Chips, Brownie",note:""},{name:"Kaua Pimenta",num:21,item:"#2 Original Roast Beef, French Bread, Choc Chip Cookie",note:""},{name:"Jack Preus",num:5,item:"#1 Ham & Provolone, French Bread, BBQ Chips, Choc Chip Cookie",note:"Meat, cheese, bread only"},{name:"Dean Wagner",num:42,item:"#1 Pepe (Ham), French Bread, BBQ Chips, Choc Chip Cookie",note:""},{name:"Soren Wright",num:23,item:"Org Box Lunch: #1 Ham & Provolone, French Bread, BBQ Chips, Choc Chip Cookie",note:"Meat, cheese, bread only"},{name:"Coach Pat Eaton",num:null,item:"#4 Turkey Breast, French Bread, BBQ Chips, Choc Chip Cookie",note:""},{name:"Coach Sherri Fenn",num:null,item:"#4 Turkey Breast, French Bread, BBQ Chips, Choc Chip Cookie",note:""},{name:"Coach Dylan Rubio",num:null,item:"#1 Ham & Provolone, French Bread, Jalapeño Chips, Choc Cookie",note:""}]}],duties:[{name:"Saturday Dinner Coordinator",icon:"🌮",notes:"Coordinate Qdoba delivery to Convention Center 5pm",assignedTo:["Mary Martinez"]},{name:"Sunday Dinner Coordinator",icon:"🥪",notes:"Coordinate Jimmy John's delivery 5pm",assignedTo:["Dara Cortes"]},{name:"Tournament Accountant",icon:"💰",notes:"Track all meal expenses and manage the $600 budget",assignedTo:[]},{name:"Saturday Meal Volunteer",icon:"🍽️",notes:"On-site at delivery — check orders, distribute food",assignedTo:["Linda Bae"]},{name:"Sunday Meal Volunteer",icon:"🍽️",notes:"On-site at delivery — check orders, distribute food",assignedTo:["Kerri Baldwin"]},{name:"Costco / Instacart Run",icon:"🛒",notes:"Purchase supplies from list before departure",assignedTo:[]}],supplies:[{cat:"Drinks",name:"Gatorade Variety Pack (20oz/24ct)",amt:"4 packs",done:false},{cat:"Drinks",name:"Water (16.9oz/40ct)",amt:"4 cases",done:false},{cat:"PB&J Station",name:"Bread",amt:"2 loaves",done:false},{cat:"PB&J Station",name:"Creamy Peanut Butter (40oz)",amt:"1 large",done:false},{cat:"PB&J Station",name:"Strawberry Jelly (32oz)",amt:"1 large",done:false},{cat:"Fruit",name:"Bananas",amt:"3 bunches",done:false},{cat:"Fruit",name:"Clementines (5lb bag)",amt:"1 bag",done:false},{cat:"Snacks & Bars",name:"Nutragrain Bars — Blueberry",amt:"8 bars",done:false},{cat:"Snacks & Bars",name:"Nutragrain Bars — Apple",amt:"2×8 bars",done:false},{cat:"Snacks & Bars",name:"Nutragrain Bars — Strawberry",amt:"16 bars",done:false},{cat:"Snacks & Bars",name:"Nature Valley PB Dark Choc Protein Bars",amt:"30 count",done:false},{cat:"Snacks & Bars",name:"Pretzel Crisps (28oz)",amt:"1 bag",done:false},{cat:"Snacks & Bars",name:"Cheeze-Its Variety Pack",amt:"45 count",done:false}],players:[{name:"Julian Bae",num:17,parents:"Linda & Rob Bae",phone1:"949-355-1734",phone2:"949-246-3336",hotel:"",allergy:"",paid:false,car:false,pin:"1701"},{name:"Hudson Baldwin",num:2,parents:"Keri & Shawn Baldwin",phone1:"949-554-5467",phone2:"949-933-9709",hotel:"",allergy:"All Nuts",paid:true,car:false,pin:"0202"},{name:"Evan Barrientos",num:11,parents:"Grace & Ceasar Barrientos",phone1:"562-547-2803",phone2:"949-439-9043",hotel:"Sheraton Phoenix Downtown",allergy:"Environmental",paid:true,car:false,pin:"1103"},{name:"Baron Cortes",num:1,parents:"Dara & Ernie Cortes",phone1:"714-473-2705",phone2:"949-299-6959",hotel:"Hyatt Place Phoenix Downtown",allergy:"None",paid:true,car:false,pin:"0104"},{name:"Sam Eastman",num:25,parents:"Alison Eastman & John Sabourin",phone1:"949-466-5408",phone2:"949-547-9900",hotel:"",allergy:"",paid:false,car:false,pin:"2505"},{name:"Julian Ebbert",num:13,parents:"Angelique Floerke & Tim Ebbert",phone1:"703-309-3355",phone2:"703-309-0093",hotel:"Sheraton Phoenix Downtown",allergy:"None",paid:true,car:true,pin:"1306"},{name:"Zac Kahlon",num:12,parents:"Jennifer & Jay Kahlon",phone1:"404-590-9385",phone2:"404-519-6264",hotel:"Sheraton Phoenix Downtown",allergy:"Gluten",paid:true,car:false,pin:"1207"},{name:"Jack Martinez",num:19,parents:"Mary & Eddie Martinez",phone1:"949-300-8143",phone2:"949-933-4059",hotel:"Sheraton",allergy:"None",paid:true,car:false,pin:"1908"},{name:"Kaua Pimenta",num:21,parents:"Luanda & Kael Pimenta",phone1:"949-307-9981",phone2:"949-929-8024",hotel:"",allergy:"",paid:true,car:false,pin:"2109"},{name:"Jack Preus",num:5,parents:"Anna & Jack Preus",phone1:"949-307-9442",phone2:"949-872-3249",hotel:"Hyatt",allergy:"",paid:false,car:false,pin:"0510"},{name:"Dean Wagner",num:42,parents:"John Schirmer & Chris Wagner",phone1:"714-307-0728",phone2:"714-348-4280",hotel:"",allergy:"",paid:false,car:false,pin:"4211"},{name:"Soren Wright",num:23,parents:"Bethany & Luke Wright",phone1:"949-689-3289",phone2:"949-422-9910",hotel:"",allergy:"",paid:true,car:false,pin:"2312"}],coaches:[{name:"Coach Pat Eaton",num:null,parents:"Head Coach",phone1:"",phone2:"",hotel:"",allergy:"",paid:false,car:true,pin:"8001"},{name:"Coach Sherri Fenn",num:null,parents:"Assistant Coach",phone1:"",phone2:"",hotel:"",allergy:"",paid:false,car:false,pin:"8002"},{name:"Coach Dylan Rubio",num:null,parents:"Assistant Coach",phone1:"",phone2:"",hotel:"",allergy:"",paid:false,car:false,pin:"8003"}]}]}]};
+
+let S;
+try{S=JSON.parse(localStorage.getItem('tripiq4'));}catch(e){}
+if(!S){S=JSON.parse(JSON.stringify(SEED));}
+// migrate: ensure duties use array assignedTo
+function migrate(s){
+  s.teams.forEach(t=>t.events.forEach(ev=>{
+    if(!ev.ezCaterPhone) ev.ezCaterPhone='800-488-1803';
+    if(!ev.venmo) ev.venmo='';
+    if(!ev.emergencyContact) ev.emergencyContact={name:'',phone:''};
+    (ev.duties||[]).forEach(d=>{if(!Array.isArray(d.assignedTo)){d.assignedTo=d.assignedTo?[d.assignedTo]:[];}});
+    // add attendees array to each player/coach if missing
+    [...(ev.players||[]),...(ev.coaches||[])].forEach(p=>{
+      if(!p.attendees) p.attendees=[];
+      // migrate old phone1/phone2/parents into first attendee if attendees empty
+      if(p.attendees.length===0 && (p.phone1||p.phone2||p.parents)){
+        const names=(p.parents||'').split('&').map(n=>n.trim()).filter(Boolean);
+        if(names[0]){p.attendees.push({name:names[0],rel:'Parent',phone:p.phone1||'',email:p.email||'',hotel:p.hotel||'',car:p.car||false});}
+        if(names[1]){p.attendees.push({name:names[1],rel:'Parent',phone:p.phone2||'',email:'',hotel:'',car:false});}
+        else if(p.phone2 && names[0]){p.attendees[0].phone2=p.phone2;}
+      }
+    });
+  }));
+}
+migrate(S);
+const ADMIN_PIN='0000';
+function save(){try{localStorage.setItem('tripiq4',JSON.stringify(S));}catch(e){}}
+function ev(){return S.teams[S.activeTeam].events[S.activeEvent];}
+function tm(){return S.teams[S.activeTeam];}
+
+// ── PIN / LOGIN ──
+function pinPress(k){
+  if(k===''){return;}
+  if(k==='⌫'){pinBuf=pinBuf.slice(0,-1);}
+  else if(pinBuf.length<4){pinBuf+=k;}
+  updatePinDots();
+  if(pinBuf.length===4)setTimeout(checkPin,150);
+}
+function updatePinDots(){for(let i=0;i<4;i++)document.getElementById('pd'+i).className='pin-dot'+(i<pinBuf.length?' filled':'');}
+function checkPin(){
+  if(pinBuf===ADMIN_PIN){S.currentUser={name:'Admin',pin:ADMIN_PIN,role:'admin'};S.adminOn=true;save();hideLock();renderAll();return;}
+  let found=null;
+  S.teams.forEach(t=>t.events.forEach(e=>[...e.players,...e.coaches].forEach(p=>{if(p.pin===pinBuf)found={person:p,team:t,event:e};})));
+  if(found){
+    S.currentUser={name:found.person.name,pin:pinBuf,role:'parent'};
+    save();hideLock();renderAll();
+    toast('Welcome, '+(found.person.parents||found.person.name).split(' ')[0]+'!');
+  } else {
+    document.getElementById('pin-error').textContent='Incorrect PIN — try again';
+    pinBuf='';updatePinDots();
+    setTimeout(()=>document.getElementById('pin-error').textContent='',2200);
+  }
+}
+function showAdminHint(){document.getElementById('login-hint').textContent='Admin PIN: 0000';}
+function hideLock(){document.getElementById('login-screen').style.display='none';}
+function handleUserBtn(){
+  if(S.currentUser){confirm2('Log out?','You will return to the PIN screen.',()=>{S.currentUser=null;S.adminOn=false;save();pinBuf='';updatePinDots();document.getElementById('pin-error').textContent='';document.getElementById('login-hint').textContent='';document.getElementById('login-screen').style.display='flex';renderAll();});}
+}
+
+// ── NAV ──
+function switchPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('main-scroll').scrollTop=0;
+}
+
+// ── HEADER ──
+function renderHeader(){
+  document.getElementById('hdr-tn').textContent=tm().name;
+  document.getElementById('hdr-en').textContent=ev().short||ev().name;
+  const isAdmin=S.adminOn;
+  const at=document.getElementById('admin-toggle');
+  at.style.display=S.currentUser?.role==='admin'?'block':'none';
+  at.className=isAdmin?'on':'';
+  at.textContent=isAdmin?'Done':'Edit';
+  const ub=document.getElementById('user-btn');
+  if(S.currentUser){ub.className='logged-in';document.getElementById('user-label').textContent=S.currentUser.name.split(' ')[0];}
+  else{ub.className='';document.getElementById('user-label').textContent='Login';}
+}
+
+function renderAll(){renderHeader();renderDash();renderInfo();renderMeals();renderBudget();renderPlayers();renderDuties();renderSupplies();}
+
+// ── DASHBOARD ──
+function renderDash(){
+  const e=ev(),u=S.currentUser;
+  const el=document.getElementById('dash-content');
+  if(!u){el.innerHTML=`<div style="text-align:center;padding:40px 20px;"><div style="font-size:48px;margin-bottom:12px">🏐</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:800;letter-spacing:1px;margin-bottom:8px">TEAM TRIP IQ</div><div style="font-size:14px;color:var(--muted);margin-bottom:4px">All your team trip info in one place.</div><div style="font-size:13px;color:var(--muted2)">Log in above with your PIN.</div></div>`;return;}
+  // find all user's player records
+  const userTeams=[];
+  S.teams.forEach((t,ti)=>t.events.forEach((ev2,ei)=>{
+    const p=[...ev2.players,...ev2.coaches].find(p=>p.pin===u.pin);
+    if(p)userTeams.push({team:t,event:ev2,person:p,ti,ei});
+  }));
+  const cur=userTeams.find(ut=>ut.ti===S.activeTeam&&ut.ei===S.activeEvent);
+  const person=cur?.person;
+  const dispName=person?(person.parents||person.name):u.name;
+  let html=`<div class="dash-greeting">Hi, ${dispName.split(' ')[0]} 👋</div>`;
+  // multi-team pills
+  if(userTeams.length>1){
+    html+=`<div class="sec-head">Your Teams</div>`;
+    html+=userTeams.map(ut=>`<div class="dash-team-pill" onclick="switchUT(${ut.ti},${ut.ei})"><div><div class="tp-name">${ut.team.name}</div><div class="tp-ev">${ut.event.short||ut.event.name}</div></div>${ut.ti===S.activeTeam&&ut.ei===S.activeEvent?'<span class="badge gd">Active</span>':'<span style="font-size:11px;color:var(--muted)">Switch →</span>'}</div>`).join('');
+  }
+  if(!person){html+=`<div class="card"><div class="card-row"><span style="color:var(--muted);font-size:13px">No record found for this event.</span></div></div>`;el.innerHTML=html;return;}
+  // outstanding items
+  const issues=[];
+  if(!person.paid)issues.push('💳 $'+e.budget.perPlayer+' meal fee not yet paid');
+  // duties
+  const myDuties=(e.duties||[]).filter(d=>d.assignedTo&&d.assignedTo.some(a=>person.parents&&person.parents.split('&').some(pp=>a.includes(pp.trim()))||a.includes(person.name)));
+  if(issues.length){
+    html+=`<div class="alert-card"><div class="alert-title">⚠️ Action Required</div>`;
+    issues.forEach(i=>html+=`<div class="alert-item"><span>${i}</span></div>`);
+    html+=`</div>`;
+    // venmo button if set
+    if(e.venmo){html+=`<a class="venmo-btn" href="https://venmo.com/${e.venmo}?txn=pay&amount=${e.budget.perPlayer}&note=${encodeURIComponent(tm().name+' '+e.short+' Meal Fee')}" target="_blank"><div class="vb-icon">💙</div><div class="vb-info"><div class="vb-title">Pay via Venmo</div><div class="vb-sub">@${e.venmo} · $${e.budget.perPlayer}</div></div><div class="vb-arrow">›</div></a>`;}
+  } else {
+    html+=`<div class="card" style="border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.06);margin-bottom:10px;"><div class="card-row"><span style="font-size:13px;color:var(--green);">✅ All clear — you're good to go!</span></div></div>`;
+  }
+  if(myDuties.length){
+    html+=`<div class="sec-head">📋 Your Duties</div>`;
+    myDuties.forEach(d=>{html+=`<div class="card" style="margin-bottom:8px;"><div class="card-row" style="gap:12px;"><span style="font-size:22px">${d.icon||'📋'}</span><div><div style="font-size:14px;font-weight:700">${d.name}</div>${d.notes?`<div style="font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5">${d.notes}</div>`:''}</div></div></div>`;});
+  }
+  html+=`<div class="sec-head">🍽️ Your Meal Orders</div>`;
+  const ordMeals=e.meals.filter(m=>m.orders&&m.orders.length>0);
+  if(ordMeals.length){ordMeals.forEach(m=>{const ord=m.orders.find(o=>o.name===person.name);html+=`<div class="dash-order-card"><div class="doc-meal">${m.dayLabel} · ${m.type}</div><div class="doc-rest">${m.restaurant}</div>${ord&&ord.item?`<div class="doc-item">${ord.item}</div>${ord.note?`<div class="doc-note">⚠ ${ord.note}</div>`:''}`:`<div style="font-size:12px;color:var(--muted);font-style:italic;margin-top:4px">No order on file yet — coordinator will confirm</div>`}</div>`;});}
+  else{html+=`<div class="card"><div class="card-row"><span style="color:var(--muted);font-size:13px">No individual orders for this event yet.</span></div></div>`;}
+  el.innerHTML=html;
+}
+function switchUT(ti,ei){S.activeTeam=ti;S.activeEvent=ei;save();renderAll();}
+
+// ── INFO ──
+function renderInfo(){
+  const e=ev();
+  document.getElementById('ev-name').textContent=e.name;
+  document.getElementById('ev-dates').textContent=e.dates;
+  document.getElementById('ev-venue').innerHTML=(e.venue||'').replace(/\n/g,'<br>');
+  document.getElementById('info-banner').dataset.short=e.short||'';
+  document.getElementById('ev-arrive').textContent=e.arrive||'—';
+  document.getElementById('ev-hotel').textContent=e.hotel||'—';
+  document.getElementById('ev-notes').innerHTML=(e.notes||'').replace(/\n/g,'<br>');
+  document.getElementById('ev-size').textContent=`${e.players.length} Players · ${e.coaches.length} Coaches`;
+  const ec=e.emergencyContact||{};
+  const ecEl=document.getElementById('ev-emergency');
+  if(ec.phone){ecEl.innerHTML=`<div style="font-size:12px;font-weight:700;margin-bottom:2px">${ec.name||'Emergency'}</div><a href="tel:${ec.phone.replace(/\D/g,'')}" style="color:var(--blue);text-decoration:none;font-size:12px">${ec.phone}</a>`;}
+  else{ecEl.innerHTML=`<span style="color:var(--muted);font-size:12px">${S.adminOn?'<button class="btn btn-ghost btn-sm" onclick="openSheet(\'edit-event-sh\')" style="font-size:10px">Set contact</button>':'Not set'}</span>`;}
+  // venmo
+  const vs=document.getElementById('venmo-section');
+  if(e.venmo){vs.innerHTML=`<a class="venmo-btn" href="https://venmo.com/${e.venmo}?txn=pay&amount=${e.budget.perPlayer}&note=${encodeURIComponent(tm().name+' '+e.short+' Meal Fee')}" target="_blank"><div class="vb-icon">💙</div><div class="vb-info"><div class="vb-title">Pay Meal Fee via Venmo</div><div class="vb-sub">@${e.venmo} · $${e.budget.perPlayer} due</div></div><div class="vb-arrow">›</div></a>`;}
+  else vs.innerHTML=S.adminOn?`<button class="btn btn-ghost btn-sm btn-full" onclick="openSheet('edit-event-sh')" style="margin-bottom:12px;">+ Set Venmo Handle</button>`:'';
+  // links
+  document.getElementById('links-list').innerHTML=(e.links||[]).map((l,i)=>`<a class="link-row" href="${l.url}" target="_blank"><div class="li-icon" style="background:rgba(26,111,255,.14)">${l.icon||'🔗'}</div><div class="li-info"><strong>${l.label}</strong><span>${l.sub||''}</span></div>${S.adminOn?`<button class="btn btn-danger btn-sm" onclick="event.preventDefault();removeLink(${i})">✕</button>`:'<span style="color:var(--muted)">›</span>'}</a>`).join('');
+  document.getElementById('admin-links-add').style.display=S.adminOn?'block':'none';
+  document.getElementById('admin-info-edit').style.display=S.adminOn?'block':'none';
+}
+
+// ── MEALS ──
+function renderMeals(){
+  const e=ev(),meals=e.meals||[];
+  const total=e.players.length+e.coaches.length;
+  const byDate={},dateOrder=[];
+  meals.forEach((m,mi)=>{
+    const k=m.date||m.dayLabel||'Other';
+    if(!byDate[k]){byDate[k]={label:m.dayLabel||k,meals:[]};dateOrder.push(k);}
+    byDate[k].meals.push({m,mi});
+  });
+  let html='';
+  dateOrder.forEach((dk,di)=>{
+    const dg=byDate[dk];
+    const dayMissing=dg.meals.reduce((s,{m})=>s+(m.ezCaterLink?Math.max(0,total-m.orders.length):0),0);
+    html+=`<div class="day-group"><div class="day-header" onclick="toggleDay(this)"><span class="day-label">${dg.label}</span><span class="day-meta">${dg.meals.length} meal${dg.meals.length>1?'s':''}</span>${dayMissing>0?`<span class="badge r">${dayMissing} missing</span>`:'<span class="badge g">Complete</span>'}<span class="day-chevron ${di===0?'open':''}">▼</span></div><div class="day-body ${di===0?'open':''}">`;
+    dg.meals.forEach(({m,mi})=>{
+      const sub=m.orders.length,miss=m.ezCaterLink?Math.max(0,total-sub):0;
+      html+=`<div class="meal-item"><div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;"><span class="meal-type-pill">${m.type}</span><span style="font-size:14px;font-weight:700;flex:1">${m.restaurant}</span>${S.adminOn?`<button class="btn btn-ghost btn-sm" onclick="openEditMeal(${mi})">Edit</button>`:''}</div>`;
+      if(m.time||m.loc)html+=`<div style="font-size:11px;color:var(--muted);margin-bottom:8px;display:flex;gap:12px;">${m.time?`<span>⏰ ${m.time}</span>`:''} ${m.loc?`<span>📍 ${m.loc}</span>`:''}</div>`;
+      if(m.notes)html+=`<div style="font-size:12px;color:rgba(232,240,255,.5);line-height:1.5;padding:8px 10px;background:rgba(255,255,255,.03);border-radius:8px;margin-bottom:8px">${m.notes}</div>`;
+      if(m.ezCaterLink){
+        html+=`<div class="order-stats"><div class="stat-chip s-b"><div class="sn">${total}</div><div class="sl">Expected</div></div><div class="stat-chip s-g"><div class="sn">${sub}</div><div class="sl">Entered</div></div><div class="stat-chip ${miss>0?'s-r':'s-g'}"><div class="sn">${miss}</div><div class="sl">Missing</div></div></div>`;
+        html+=`<a class="ezcater-btn" href="${m.ezCaterLink}" target="_blank"><div class="ec-main"><div class="ec-title">🛒 Open on EZ Cater</div><div class="ec-sub">Coordinator link — ${m.restaurant}</div></div><span class="ec-arrow">›</span></a>`;
+      }
+      if(m.volunteer)html+=`<div style="font-size:11px;color:var(--muted);margin-bottom:8px;">👤 <strong>Coordinator:</strong> ${m.volunteer}</div>`;
+      if(m.orders.length||S.adminOn){
+        html+=`<div class="orders-card">`;
+        html+=`<div class="row-sep"><span>Players (${e.players.length})</span></div>`;
+        e.players.forEach(p=>{const ord=m.orders.find(o=>o.name===p.name);html+=oRow(p,ord,mi,m,S.adminOn,'player');});
+        html+=`<div class="row-sep"><span>Coaches (${e.coaches.length})</span></div>`;
+        e.coaches.forEach(p=>{const ord=m.orders.find(o=>o.name===p.name);html+=oRow(p,ord,mi,m,S.adminOn,'coach');});
+        html+=`</div>`;
+      } else if(!m.ezCaterLink){html+=`<div style="font-size:12px;color:var(--muted);padding:4px 0;font-style:italic">Group meal — no individual orders</div>`;}
+      if(S.adminOn)html+=`<div style="display:flex;gap:7px;margin-top:8px;"><button class="btn btn-ghost btn-sm" style="flex:1" onclick="openAddOrder(${mi})">+ Add Order</button><button class="btn btn-danger btn-sm" onclick="confirmDeleteMeal(${mi})">Delete Meal</button></div>`;
+      html+=`</div>`;
+    });
+    html+=`</div></div>`;
+  });
+  if(!meals.length)html='<div class="empty-msg">No meals added yet.</div>';
+  document.getElementById('days-list').innerHTML=html;
+  document.getElementById('admin-meal-add').style.display=S.adminOn?'block':'none';
+}
+function oRow(p,ord,mi,m,admin,role){
+  const oi=ord?m.orders.indexOf(ord):-1;
+  return `<div class="order-row"><div class="or-num">${p.num!=null?'#'+p.num:(role==='coach'?'🏅':'—')}</div><div class="or-body"><div class="or-name">${p.name}</div>${ord&&ord.item?`<div class="or-item">${ord.item}</div>${ord.note?`<div class="or-note">⚠ ${ord.note}</div>`:''}`:(m.ezCaterLink?`<div class="or-missing">No order entered yet</div>`:`<div style="font-size:10px;color:var(--muted);font-style:italic">Group order</div>`)}</div><div>${admin&&oi>=0?`<button class="btn btn-ghost btn-sm" onclick="openEditOrder(${mi},${oi})">Edit</button>`:''} ${admin&&!ord?`<button class="btn btn-ghost btn-sm" onclick="openOrderFor(${mi},'${p.name.replace(/'/g,"\\'")}',${p.num})">+</button>`:''}</div></div>`;
+}
+function toggleDay(h){const b=h.nextElementSibling,c=h.querySelector('.day-chevron');b.classList.toggle('open');c.classList.toggle('open');}
+
+// ── BUDGET ──
+function renderBudget(){
+  const e=ev();
+  const paid=e.players.filter(p=>p.paid).length;
+  const collected=paid*(e.budget?.perPlayer||50);
+  const spend=(e.meals||[]).reduce((s,m)=>s+(m.estimatedCost||0),0);
+  const rem=collected-spend;
+  document.getElementById('budget-top').innerHTML=`<div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;"><div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:3px">Collected</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:800;color:var(--green)">$${collected.toLocaleString()}</div><div style="font-size:11px;color:var(--muted)">$${e.budget?.perPlayer||50}/player × ${paid} paid</div></div><div style="display:flex;flex-direction:column;gap:7px;min-width:120px;"><div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;"><div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:2px">Est. Spend</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800">$${spend.toLocaleString()}</div></div><div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;"><div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:2px">Remaining</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:${rem>=0?'var(--green)':'var(--red)'}">$${Math.abs(rem).toLocaleString()}${rem<0?' OVR':''}</div></div></div>`;
+  document.getElementById('admin-budget-edit').style.display=S.adminOn?'block':'none';
+  document.getElementById('budget-expenses').innerHTML=(e.meals||[]).map(m=>`<div class="budget-row-item"><div class="bri-left"><div class="bri-name">${m.dayLabel} — ${m.restaurant}</div><div class="bri-sub">${m.type}${m.volunteer?' · '+m.volunteer:''}</div></div><div class="bri-amt" style="color:var(--red)">–$${(m.estimatedCost||0).toLocaleString()}</div></div>`).join('')||'<div class="empty-msg">No meals</div>';
+  const pb=document.getElementById('paid-badge');
+  pb.textContent=`${paid}/${e.players.length}`;pb.className=`badge ${paid===e.players.length?'g':'a'}`;
+  document.getElementById('pay-grid').innerHTML=e.players.map((p,i)=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 11px;display:flex;align-items:center;gap:7px;${S.adminOn?'cursor:pointer':''}" onclick="${S.adminOn?`togglePaid(${i})`:''}" ><div style="width:8px;height:8px;border-radius:50%;background:${p.paid?'var(--green)':'var(--amber)'};flex-shrink:0;"></div><div><div style="font-size:12px;font-weight:600">${p.name.split(' ')[0]} ${p.name.split(' ').slice(-1)}</div><div style="font-size:10px;color:var(--muted)">${p.paid?'✓ Paid':'Pending'}</div></div></div>`).join('');
+}
+
+// ── PLAYERS (with inline attendees) ──
+function renderPlayers(){
+  const e=ev();
+
+  function makeCard(p, idx, role){
+    const atts=p.attendees||[];
+    const ini=(p.name||'?').split(' ').filter(w=>w).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const myDuties=(e.duties||[]).filter(d=>(d.assignedTo||[]).some(a=>atts.some(at=>at.name&&a.includes(at.name))||a.includes(p.name)));
+    const hasCar=atts.some(a=>a.car);
+    const allergy=p.allergy&&p.allergy!=='None'&&p.allergy;
+
+    let html=`<div class="plyr-card">
+      <div class="plyr-hdr">
+        <div class="plyr-num">${p.num!=null?p.num:role==='coach'?'🏅':'—'}</div>
+        <div class="plyr-info">
+          <div class="plyr-name">${p.name}</div>
+          <div class="plyr-sub">
+            ${allergy?`<span style="color:var(--red)">⚠ ${p.allergy}</span>`:''}
+            ${hasCar?'<span style="color:#60a5fa">🚗 Has car</span>':''}
+            ${myDuties.length?`<span style="color:var(--gold)">${myDuties.length} duty${myDuties.length>1?'s':''}</span>`:''}
+          </div>
+        </div>
+        <div class="plyr-badges">
+          ${p.paid?'<span class="badge g">Paid</span>':'<span class="badge a">Pending</span>'}
+          ${S.adminOn?`<button class="btn btn-ghost btn-sm" style="font-size:10px;padding:3px 8px" onclick="openEditPersonSheet(${idx},'${role}')">Edit</button>`:''}
+        </div>
+      </div>`;
+
+    // Attendees
+    if(atts.length||S.adminOn){
+      html+=`<div class="attendees-section">`;
+      html+=`<div class="attendee-lbl">${role==='player'?'Parents & Spectators':'Contacts'}</div>`;
+      atts.forEach((a,ai)=>{
+        const aini=(a.name||'?').split(' ').filter(w=>w).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+        html+=`<div class="attendee-row">
+          <div class="att-av">${aini}</div>
+          <div class="att-body">
+            <div class="att-name">${a.name}</div>
+            <div class="att-rel">${a.rel||'Parent'}</div>
+            <div class="att-contacts">
+              ${a.phone?`<div class="att-contact"><span class="att-contact-icon">📞</span><span class="att-contact-val">${a.phone}</span><div class="att-contact-action"><a href="tel:${a.phone.replace(/\D/g,'')}" class="btn btn-ghost btn-sm" style="color:var(--blue);padding:3px 8px;font-size:11px">Call</a></div></div>`:''}
+              ${a.email?`<div class="att-contact"><span class="att-contact-icon">✉️</span><span class="att-contact-val">${a.email}</span><div class="att-contact-action"><a href="mailto:${a.email}" class="btn btn-ghost btn-sm" style="color:var(--blue);padding:3px 8px;font-size:11px">Email</a></div></div>`:''}
+              ${a.hotel?`<div class="att-contact"><span class="att-contact-icon">🏨</span><span class="att-contact-val">${a.hotel}</span></div>`:''}
+            </div>
+            ${a.car?`<div class="att-car">🚗 Has car at event</div>`:''}
+          </div>
+          ${S.adminOn?`<div class="att-actions"><button class="btn btn-ghost btn-sm" style="font-size:10px;padding:3px 8px" onclick="openEditAttendee(${idx},'${role}',${ai})">Edit</button></div>`:''}
+        </div>`;
+      });
+      if(S.adminOn){
+        html+=`<div class="add-att-btn" onclick="openAddAttendee(${idx},'${role}')">
+          <span style="font-size:18px;color:var(--muted)">＋</span>
+          <span>Add parent / spectator</span>
+        </div>`;
+      }
+      html+=`</div>`;
+    }
+
+    html+=`</div>`;
+    return html;
+  }
+
+  document.getElementById('roster-players').innerHTML=
+    e.players.map((p,i)=>makeCard(p,i,'player')).join('')||'<div class="empty-msg">No players</div>';
+  document.getElementById('roster-coaches').innerHTML=
+    e.coaches.map((p,i)=>makeCard(p,i,'coach')).join('')||'<div class="empty-msg">No coaches</div>';
+  document.getElementById('admin-roster-add').style.display=S.adminOn?'flex':'none';
+}
+
+// ── ATTENDEE ACTIONS ──
+function openAddAttendee(playerIdx, role){
+  document.getElementById('aa-player-idx').value=playerIdx;
+  document.getElementById('aa-player-role').value=role;
+  document.getElementById('aa-att-idx').value=-1;
+  document.getElementById('aa-title').textContent='Add Parent / Spectator';
+  ['aa-name','aa-phone','aa-email','aa-hotel'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('aa-rel').value='Mom';
+  document.getElementById('aa-car').checked=false;
+  document.getElementById('aa-del-btn').style.display='none';
+  openSheet('add-att-sh');
+}
+function openEditAttendee(playerIdx, role, attIdx){
+  const list=role==='player'?ev().players:ev().coaches;
+  const a=list[playerIdx].attendees[attIdx];
+  document.getElementById('aa-player-idx').value=playerIdx;
+  document.getElementById('aa-player-role').value=role;
+  document.getElementById('aa-att-idx').value=attIdx;
+  document.getElementById('aa-title').textContent='Edit Attendee';
+  document.getElementById('aa-name').value=a.name||'';
+  document.getElementById('aa-rel').value=a.rel||'Mom';
+  document.getElementById('aa-phone').value=a.phone||'';
+  document.getElementById('aa-email').value=a.email||'';
+  document.getElementById('aa-hotel').value=a.hotel||'';
+  document.getElementById('aa-car').checked=a.car||false;
+  document.getElementById('aa-del-btn').style.display='inline-flex';
+  openSheet('add-att-sh');
+}
+function saveAttendee(){
+  const pi=parseInt(document.getElementById('aa-player-idx').value);
+  const role=document.getElementById('aa-player-role').value;
+  const ai=parseInt(document.getElementById('aa-att-idx').value);
+  const name=document.getElementById('aa-name').value.trim();
+  if(!name){toast('Name required');return;}
+  const list=role==='player'?ev().players:ev().coaches;
+  if(!list[pi].attendees) list[pi].attendees=[];
+  const obj={
+    name, rel:document.getElementById('aa-rel').value,
+    phone:document.getElementById('aa-phone').value.trim(),
+    email:document.getElementById('aa-email').value.trim(),
+    hotel:document.getElementById('aa-hotel').value.trim(),
+    car:document.getElementById('aa-car').checked
+  };
+  if(ai>=0) list[pi].attendees[ai]=obj;
+  else list[pi].attendees.push(obj);
+  save(); closeSheet('add-att-sh'); renderPlayers(); toast('Saved!');
+}
+function deleteAttendee(){
+  const pi=parseInt(document.getElementById('aa-player-idx').value);
+  const role=document.getElementById('aa-player-role').value;
+  const ai=parseInt(document.getElementById('aa-att-idx').value);
+  confirm2('Remove this attendee?','They will be removed from the player\'s contact list.',()=>{
+    const list=role==='player'?ev().players:ev().coaches;
+    list[pi].attendees.splice(ai,1);
+    save(); closeSheet('add-att-sh'); renderPlayers(); toast('Removed');
+  },'Remove');
+}
+
+// ── DUTIES ──
+  const duties=ev().duties||[];
+  const e=ev();
+  function dutyCard(d,i){
+    const assignees=d.assignedTo||[];
+    const assigneeDetails=assignees.map(a=>{
+      // Search attendees first, then coach names
+      let phone='';
+      e.players.forEach(p=>{(p.attendees||[]).forEach(att=>{if(att.name===a)phone=att.phone||'';});});
+      if(!phone){const coach=e.coaches.find(c=>c.name===a);if(coach)phone=coach.phone1||'';}
+      return {name:a,phone};
+    });
+    return `<div class="duty-card">
+      <div class="duty-hdr-row">
+        <div class="duty-icon-el">${d.icon||'📋'}</div>
+        <div class="duty-title">${d.name}</div>
+        ${assignees.length?`<span class="badge g">Assigned</span>`:`<span class="badge r">Open</span>`}
+        ${S.adminOn?`<button class="btn btn-ghost btn-sm" onclick="openEditDuty(${i})">Edit</button>`:''}
+      </div>
+      ${d.notes?`<div class="duty-notes-row">${d.notes}</div>`:''}
+      ${assigneeDetails.length?`<div class="duty-assignees">`+assigneeDetails.map(a=>{
+        const ini=a.name.split(' ').filter(w=>w).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+        return `<div class="assignee-row"><div class="assignee-av">${ini}</div><div><div class="assignee-name">${a.name}</div>${a.phone?`<div class="assignee-phone">${a.phone}</div>`:''}</div>${a.phone?`<a href="tel:${a.phone.replace(/\D/g,'')}" class="btn btn-ghost btn-sm" style="margin-left:auto">Call</a>`:''}</div>`;
+      }).join('')+`</div>`:''}
+    </div>`;
+  }
+  const un=duties.filter(d=>!(d.assignedTo&&d.assignedTo.length));
+  const as=duties.filter(d=>d.assignedTo&&d.assignedTo.length);
+  document.getElementById('duties-unassigned').innerHTML=un.length?un.map(d=>dutyCard(d,duties.indexOf(d))).join(''):'<div class="empty-msg">All duties assigned 🎉</div>';
+  document.getElementById('duties-assigned').innerHTML=as.length?as.map(d=>dutyCard(d,duties.indexOf(d))).join(''):'<div class="empty-msg">No duties assigned yet</div>';
+  document.getElementById('admin-duty-add').style.display=S.adminOn?'block':'none';
+}
+
+// ── SUPPLIES ──
+function renderSupplies(){
+  const e=ev();
+  document.getElementById('supply-notes-txt').innerHTML=(e.supplyNotes||'').replace(/\n/g,'<br>');
+  const items=e.supplies||[];
+  const cats=[...new Set(items.map(s=>s.cat))];
+  let html='';
+  cats.forEach(cat=>{
+    html+=`<div class="supply-cat-hdr"><span class="supply-cat-name">${cat}</span>${S.adminOn?`<button class="btn btn-ghost btn-sm" onclick="openEditCat('${cat.replace(/'/g,"\\'")}')" style="font-size:10px">Rename</button>`:''}</div>`;
+    html+=`<div class="card" style="padding:2px 0;margin-bottom:6px;">`;
+    items.filter(s=>s.cat===cat).forEach(s=>{
+      const i=items.indexOf(s);
+      html+=`<div class="supply-row"><button class="supply-chk ${s.done?'done':''}" onclick="toggleSupply(${i})">${s.done?'✓':''}</button><span class="supply-n ${s.done?'done':''}">${s.name}</span><span class="supply-a">${s.amt}</span>${S.adminOn?`<button class="btn btn-danger btn-sm" onclick="confirmAction('Remove item?','',()=>{ev().supplies.splice(${i},1);save();renderSupplies();})">✕</button>`:''}</div>`;
+    });
+    html+=`</div>`;
+  });
+  if(!items.length)html='<div class="empty-msg">No supplies added</div>';
+  document.getElementById('supplies-list').innerHTML=html;
+  document.getElementById('admin-supply-add').style.display=S.adminOn?'block':'none';
+}
+
+// ── TEAM / EVENT ACTIONS ──
+function renderTeamList(){document.getElementById('team-list').innerHTML=S.teams.map((t,i)=>`<div class="card-row tap" onclick="selTeam(${i})"><span style="flex:1;font-size:14px;font-weight:600">${t.name}</span>${i===S.activeTeam?'<span class="badge gd">Active</span>':''}</div>`).join('');}
+function selTeam(i){S.activeTeam=i;S.activeEvent=0;save();closeSheet('team-sheet');renderAll();}
+function addTeam(){const n=document.getElementById('nt-name').value.trim();if(!n){toast('Name required');return;}S.teams.push({name:n,events:[{name:'New Event',short:'Event',dates:'',venue:'',arrive:'',hotel:'',ezCaterPhone:'800-488-1803',venmo:'',notes:'',supplyNotes:'',budget:{perPlayer:50},links:[],meals:[],duties:[],supplies:[],players:[],coaches:[]}]});S.activeTeam=S.teams.length-1;S.activeEvent=0;document.getElementById('nt-name').value='';save();closeSheet('add-team-sh');renderAll();toast('Team created!');}
+function renderEventList(){document.getElementById('event-list').innerHTML=tm().events.map((e,i)=>`<div class="card-row tap" onclick="selEvent(${i})"><div style="flex:1"><div style="font-size:14px;font-weight:600">${e.name}</div><div style="font-size:11px;color:var(--muted)">${e.dates||''}</div></div>${i===S.activeEvent?'<span class="badge gd">Active</span>':''}</div>`).join('');}
+function selEvent(i){S.activeEvent=i;save();closeSheet('event-sheet');renderAll();}
+function addEvent(){const n=document.getElementById('ne-name').value.trim();if(!n){toast('Name required');return;}tm().events.push({name:n,short:document.getElementById('ne-short').value.trim()||n,dates:document.getElementById('ne-dates').value.trim(),venue:document.getElementById('ne-venue').value.trim(),hotel:document.getElementById('ne-hotel').value.trim(),arrive:'',ezCaterPhone:'800-488-1803',venmo:'',emergencyContact:{name:'',phone:''},notes:'',supplyNotes:'',budget:{perPlayer:50},links:[],meals:[],duties:[],supplies:[],players:[],coaches:[]});S.activeEvent=tm().events.length-1;['ne-name','ne-short','ne-dates','ne-venue','ne-hotel'].forEach(id=>document.getElementById(id).value='');save();closeSheet('add-event-sh');renderAll();toast('Event created!');}
+function cloneEvent(){const n=document.getElementById('cl-name').value.trim();if(!n){toast('Name required');return;}const src=ev();tm().events.push({name:n,short:document.getElementById('cl-short').value.trim()||n,dates:document.getElementById('cl-dates').value.trim(),venue:document.getElementById('cl-venue').value.trim()||src.venue,hotel:src.hotel,arrive:'',ezCaterPhone:src.ezCaterPhone,venmo:src.venmo,emergencyContact:{...src.emergencyContact||{name:'',phone:''}},notes:src.notes,supplyNotes:src.supplyNotes,budget:{...src.budget},links:[...src.links],meals:[],duties:document.getElementById('cl-duties').checked?src.duties.map(d=>({...d,assignedTo:[]})):[],supplies:document.getElementById('cl-supplies').checked?src.supplies.map(s=>({...s,done:false})):[],players:document.getElementById('cl-roster').checked?src.players.map(p=>({...p,paid:false,attendees:(p.attendees||[]).map(a=>({...a}))})):[],coaches:document.getElementById('cl-roster').checked?src.coaches.map(c=>({...c,attendees:(c.attendees||[]).map(a=>({...a}))})):[]});S.activeEvent=tm().events.length-1;['cl-name','cl-short','cl-dates','cl-venue'].forEach(id=>document.getElementById(id).value='');save();closeSheet('clone-event-sh');renderAll();toast('Trip cloned!');}
+function openEditEventSheet(){
+  const e=ev();
+  document.getElementById('ee-name').value=e.name||'';
+  document.getElementById('ee-short').value=e.short||'';
+  document.getElementById('ee-dates').value=e.dates||'';
+  document.getElementById('ee-venue').value=e.venue||'';
+  document.getElementById('ee-arrive').value=e.arrive||'';
+  document.getElementById('ee-hotel').value=e.hotel||'';
+  document.getElementById('ee-ezcater-ph').value=e.ezCaterPhone||'';
+  document.getElementById('ee-venmo').value=e.venmo||'';
+  document.getElementById('ee-per-player').value=e.budget?.perPlayer||50;
+  document.getElementById('ee-notes').value=e.notes||'';
+  document.getElementById('ee-supply-notes').value=e.supplyNotes||'';
+  document.getElementById('ee-emerg-name').value=e.emergencyContact?.name||'';
+  document.getElementById('ee-emerg-phone').value=e.emergencyContact?.phone||'';
+}
+function saveEventDetails(){
+  const e=ev();
+  e.name=document.getElementById('ee-name').value.trim()||e.name;
+  e.short=document.getElementById('ee-short').value.trim()||e.short;
+  e.dates=document.getElementById('ee-dates').value.trim();
+  e.venue=document.getElementById('ee-venue').value.trim();
+  e.arrive=document.getElementById('ee-arrive').value.trim();
+  e.hotel=document.getElementById('ee-hotel').value.trim();
+  e.ezCaterPhone=document.getElementById('ee-ezcater-ph').value.trim();
+  e.venmo=document.getElementById('ee-venmo').value.trim();
+  e.budget.perPlayer=parseFloat(document.getElementById('ee-per-player').value)||50;
+  e.notes=document.getElementById('ee-notes').value.trim();
+  e.supplyNotes=document.getElementById('ee-supply-notes').value.trim();
+  e.emergencyContact={
+    name:document.getElementById('ee-emerg-name').value.trim(),
+    phone:document.getElementById('ee-emerg-phone').value.trim()
+  };
+  save();closeSheet('edit-event-sh');renderAll();toast('Saved!');
+}
+function saveBudgetSettings(){const e=ev();e.budget.perPlayer=parseFloat(document.getElementById('eb-per-player').value)||50;e.venmo=document.getElementById('eb-venmo').value.trim();save();closeSheet('edit-budget-sh');renderBudget();renderInfo();toast('Budget updated!');}
+
+// ── PERSON ACTIONS ──
+function openPerson(i,role){
+  const e=ev();const list=role==='player'?e.players:e.coaches;const p=list[i];
+  const ini=p.name.split(' ').filter(w=>w).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const myDuties=(e.duties||[]).filter(d=>d.assignedTo&&d.assignedTo.some(a=>a.includes(p.parents||'')||a.includes(p.name)));
+  document.getElementById('person-sh-body').innerHTML=`<div style="display:flex;align-items:center;gap:13px;margin-bottom:16px;"><div style="width:50px;height:50px;border-radius:50%;background:var(--surface2);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:var(--gold);flex-shrink:0;">${ini}</div><div><div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;text-transform:uppercase">${p.name}</div><div style="font-size:12px;color:var(--muted)">${p.num!=null?'#'+p.num+' · ':''}${p.parents||''}</div></div></div>${cr('📱','Contact 1',p.phone1,p.phone1)}${p.phone2?cr('📱','Contact 2',p.phone2,p.phone2):''}${p.hotel?cr('🏨','Hotel',p.hotel,''):''}${cr('⚠️','Allergies',p.allergy||'None','')}${cr('💰','Meal Fee',p.paid?'✓ Paid':'Pending','')}${cr('🚗','Has Car',p.car?'Yes':'No','')}${p.pin&&S.adminOn?cr('🔑','Login PIN',p.pin,''):''}${myDuties.length?'<div style="margin-top:12px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Duties</div>'+myDuties.map(d=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);"><span style="font-size:16px">${d.icon||'📋'}</span><span style="font-size:13px;font-weight:600">${d.name}</span></div>`).join(''):''}${S.adminOn?`<div style="display:flex;gap:7px;margin-top:14px;"><button class="btn btn-ghost" style="flex:1" onclick="openEditPersonSheet(${i},'${role}')">Edit</button><button class="btn btn-danger" style="flex:1" onclick="confirmAction('Remove ${p.name.replace(/'/g,"\\'")}?','They will be removed from the roster.',()=>{ev().${role==='player'?'players':'coaches'}.splice(${i},1);save();closeSheet('person-sheet');renderAll();})">Remove</button></div>`:''}`;
+  openSheet('person-sheet');
+}
+function cr(icon,label,val,phone){return `<div style="display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border);"><div style="width:28px;height:28px;background:var(--surface2);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">${icon}</div><div style="flex:1;"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)">${label}</div><div style="font-size:13px;font-weight:500;margin-top:1px">${val||'—'}</div></div>${phone?`<a href="tel:${phone.replace(/\D/g,'')}" style="color:var(--blue);text-decoration:none;font-size:12px;font-weight:700;">Call</a>`:''}</div>`;}
+function openAddPersonSheet(role){document.getElementById('ap-role').value=role;document.getElementById('ap-idx').value=-1;document.getElementById('ap-title').textContent=role==='player'?'Add Player':'Add Coach';['ap-name','ap-num','ap-parents','ap-p1','ap-p2','ap-email','ap-allergy','ap-hotel','ap-pin'].forEach(id=>document.getElementById(id).value='');document.getElementById('ap-paid').checked=false;document.getElementById('ap-car').checked=false;openSheet('add-person-sh');}
+function openEditPersonSheet(i,role){const e=ev();const list=role==='player'?e.players:e.coaches;const p=list[i];document.getElementById('ap-role').value=role;document.getElementById('ap-idx').value=i;document.getElementById('ap-title').textContent='Edit';document.getElementById('ap-name').value=p.name||'';document.getElementById('ap-num').value=p.num!=null?p.num:'';document.getElementById('ap-parents').value=p.parents||'';document.getElementById('ap-p1').value=p.phone1||'';document.getElementById('ap-p2').value=p.phone2||'';document.getElementById('ap-email').value=p.email||'';document.getElementById('ap-allergy').value=p.allergy||'';document.getElementById('ap-hotel').value=p.hotel||'';document.getElementById('ap-pin').value=p.pin||'';document.getElementById('ap-paid').checked=p.paid||false;document.getElementById('ap-car').checked=p.car||false;closeSheet('person-sheet');openSheet('add-person-sh');}
+function savePerson(){
+  const role=document.getElementById('ap-role').value;
+  const idx=parseInt(document.getElementById('ap-idx').value);
+  const name=document.getElementById('ap-name').value.trim();
+  if(!name){toast('Name required');return;}
+  const list=role==='player'?ev().players:ev().coaches;
+  const existing=idx>=0?list[idx]:null;
+  const obj={
+    name,
+    num:document.getElementById('ap-num').value?parseInt(document.getElementById('ap-num').value):null,
+    parents:document.getElementById('ap-parents').value.trim(),
+    phone1:document.getElementById('ap-p1').value.trim(),
+    phone2:document.getElementById('ap-p2').value.trim(),
+    email:document.getElementById('ap-email').value.trim(),
+    allergy:document.getElementById('ap-allergy').value.trim(),
+    hotel:document.getElementById('ap-hotel').value.trim(),
+    pin:document.getElementById('ap-pin').value.trim(),
+    paid:document.getElementById('ap-paid').checked,
+    car:document.getElementById('ap-car').checked,
+    attendees:existing?.attendees||[]  // preserve attendees when editing
+  };
+  if(idx>=0) list[idx]=obj;
+  else list.push(obj);
+  save();closeSheet('add-person-sh');renderAll();toast('Saved!');
+}
+function togglePaid(i){ev().players[i].paid=!ev().players[i].paid;save();renderBudget();renderDash();renderPlayers();}
+
+// ── MEAL ACTIONS ──
+function openEditMeal(mi){const m=ev().meals[mi];document.getElementById('am-idx').value=mi;document.getElementById('am-title').textContent='Edit Meal';['am-date','am-daylabel','am-rest','am-time','am-loc','am-ez','am-vol','am-notes'].forEach((id,n)=>{const k=['date','dayLabel','restaurant','time','loc','ezCaterLink','volunteer','notes'][n];document.getElementById(id).value=m[k]||'';});document.getElementById('am-type').value=m.type||'Dinner';document.getElementById('am-cost').value=m.estimatedCost||0;openSheet('add-meal-sh');}
+function saveMeal(){const idx=parseInt(document.getElementById('am-idx').value);const obj={date:document.getElementById('am-date').value.trim(),dayLabel:document.getElementById('am-daylabel').value.trim()||document.getElementById('am-date').value.trim(),type:document.getElementById('am-type').value,restaurant:document.getElementById('am-rest').value.trim(),time:document.getElementById('am-time').value.trim(),loc:document.getElementById('am-loc').value.trim(),ezCaterLink:document.getElementById('am-ez').value.trim(),volunteer:document.getElementById('am-vol').value.trim(),estimatedCost:parseFloat(document.getElementById('am-cost').value)||0,notes:document.getElementById('am-notes').value.trim(),orders:idx>=0?ev().meals[idx].orders:[]};if(idx>=0)ev().meals[idx]={...obj,orders:ev().meals[idx].orders};else ev().meals.push(obj);document.getElementById('am-idx').value=-1;document.getElementById('am-title').textContent='Add Meal';save();closeSheet('add-meal-sh');renderAll();toast('Meal saved!');}
+function confirmDeleteMeal(mi){confirm2('Delete this meal?','All entered orders for this meal will be removed.',()=>{ev().meals.splice(mi,1);save();renderAll();toast('Deleted');});}
+function openAddOrder(mi){openOrderSheet(mi,null,null,-1);}
+function openOrderFor(mi,name,num){openOrderSheet(mi,name,num,-1);}
+function openEditOrder(mi,oi){const o=ev().meals[mi].orders[oi];openOrderSheet(mi,o.name,o.num,oi,o.item,o.note);}
+function openOrderSheet(mi,name,num,oi,item='',note=''){document.getElementById('ao-meal').value=mi;document.getElementById('ao-idx').value=oi;document.getElementById('ao-title').textContent=oi>=0?'Edit Order':'Add Order';document.getElementById('ao-name').value=name||'';document.getElementById('ao-num').value=num!=null?num:'';document.getElementById('ao-item').value=item;document.getElementById('ao-note').value=note;document.getElementById('ao-del-btn').style.display=oi>=0?'inline-flex':'none';openSheet('add-order-sh');}
+function saveOrder(){const mi=parseInt(document.getElementById('ao-meal').value);const oi=parseInt(document.getElementById('ao-idx').value);const name=document.getElementById('ao-name').value.trim();if(!name){toast('Name required');return;}const obj={name,num:document.getElementById('ao-num').value?parseInt(document.getElementById('ao-num').value):null,item:document.getElementById('ao-item').value.trim(),note:document.getElementById('ao-note').value.trim()};const orders=ev().meals[mi].orders;if(oi>=0)orders[oi]=obj;else orders.push(obj);save();closeSheet('add-order-sh');renderAll();toast('Order saved!');}
+function confirmDeleteOrder(){const mi=parseInt(document.getElementById('ao-meal').value);const oi=parseInt(document.getElementById('ao-idx').value);const name=document.getElementById('ao-name').value.trim();confirm2(`Delete ${name}'s order?`,`This removes their food order from ${ev().meals[mi]?.restaurant}. The coordinator will need to re-enter it if removed by mistake.`,()=>{ev().meals[mi].orders.splice(oi,1);save();closeSheet('add-order-sh');renderAll();toast('Order deleted');});}
+
+// ── DUTIES ──
+function buildPersonChecklist(selectedArr){
+  const e=ev();
+  // Build list from attendee names + coach names
+  const people=[];
+  e.players.forEach(p=>{
+    (p.attendees||[]).forEach(a=>{if(a.name&&!people.find(x=>x.name===a.name))people.push({name:a.name,ini:a.name.split(' ').filter(w=>w).map(w=>w[0]).join('').slice(0,2).toUpperCase()});});
+    // fallback: if no attendees, use parents field
+    if(!(p.attendees||[]).length&&p.parents){const n=p.parents;if(!people.find(x=>x.name===n))people.push({name:n,ini:n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()});}
+  });
+  e.coaches.forEach(c=>{if(!people.find(x=>x.name===c.name))people.push({name:c.name,ini:c.name.split(' ').filter(w=>w).map(w=>w[0]).join('').slice(0,2).toUpperCase()});});
+  document.getElementById('duty-person-list').innerHTML=people.map(p=>{
+    const sel=selectedArr&&selectedArr.includes(p.name);
+    return `<div class="person-check-item ${sel?'selected':''}" onclick="togglePersonCheck(this,'${p.name.replace(/'/g,"\\'")}')"><div class="pci-av">${p.ini}</div><span class="pci-name">${p.name}</span><div class="pci-check">${sel?'✓':''}</div></div>`;
+  }).join('');
+}
+function togglePersonCheck(el,name){el.classList.toggle('selected');el.querySelector('.pci-check').textContent=el.classList.contains('selected')?'✓':'';}
+function getSelectedPeople(){return [...document.querySelectorAll('#duty-person-list .person-check-item.selected')].map(el=>el.querySelector('.pci-name').textContent);}
+function openNewDutySheet(){document.getElementById('ad-idx').value=-1;document.getElementById('ad-title').textContent='Add Duty';['ad-name','ad-icon','ad-notes'].forEach(id=>document.getElementById(id).value='');buildPersonChecklist([]);openSheet('add-duty-sh');}
+function openEditDuty(i){const d=ev().duties[i];document.getElementById('ad-idx').value=i;document.getElementById('ad-title').textContent='Edit Duty';document.getElementById('ad-name').value=d.name||'';document.getElementById('ad-icon').value=d.icon||'';document.getElementById('ad-notes').value=d.notes||'';buildPersonChecklist(d.assignedTo||[]);openSheet('add-duty-sh');}
+function saveDuty(){const idx=parseInt(document.getElementById('ad-idx').value);const obj={name:document.getElementById('ad-name').value.trim(),icon:document.getElementById('ad-icon').value.trim()||'📋',notes:document.getElementById('ad-notes').value.trim(),assignedTo:getSelectedPeople()};if(!obj.name){toast('Name required');return;}const duties=ev().duties;if(idx>=0)duties[idx]=obj;else duties.push(obj);save();closeSheet('add-duty-sh');renderDuties();renderPlayers();renderDash();toast('Saved!');}
+
+// ── SUPPLIES ──
+function toggleSupply(i){ev().supplies[i].done=!ev().supplies[i].done;save();renderSupplies();}
+function addSupply(){const n=document.getElementById('ns-name').value.trim();if(!n){toast('Name required');return;}ev().supplies.push({cat:document.getElementById('ns-cat').value.trim()||'Other',name:n,amt:document.getElementById('ns-amt').value.trim(),done:false});['ns-cat','ns-name','ns-amt'].forEach(id=>document.getElementById(id).value='');save();closeSheet('add-supply-sh');renderSupplies();toast('Added!');}
+function openEditCat(cat){document.getElementById('ec-old-name').value=cat;document.getElementById('ec-new-name').value=cat;openSheet('edit-cat-sh');}
+function saveCategory(){const oldN=document.getElementById('ec-old-name').value;const newN=document.getElementById('ec-new-name').value.trim();if(!newN){toast('Name required');return;}ev().supplies.forEach(s=>{if(s.cat===oldN)s.cat=newN;});save();closeSheet('edit-cat-sh');renderSupplies();toast('Category renamed!');}
+
+// ── LINKS ──
+function addLink(){const l=document.getElementById('nl-label').value.trim();if(!l){toast('Label required');return;}ev().links.push({label:l,url:document.getElementById('nl-url').value.trim()||'#',icon:document.getElementById('nl-icon').value.trim()||'🔗',sub:document.getElementById('nl-sub').value.trim()});['nl-label','nl-url','nl-icon','nl-sub'].forEach(id=>document.getElementById(id).value='');save();closeSheet('add-link-sh');renderInfo();toast('Added!');}
+function removeLink(i){ev().links.splice(i,1);save();renderInfo();}
+
+// ── BUDGET ──
+function openEditBudget(){const e=ev();document.getElementById('eb-per-player').value=e.budget?.perPlayer||50;document.getElementById('eb-venmo').value=e.venmo||'';}
+
+// ── SHEETS ──
+function openSheet(id){
+  if(id==='team-sheet')renderTeamList();
+  if(id==='event-sheet')renderEventList();
+  if(id==='edit-event-sh')openEditEventSheet();
+  if(id==='edit-budget-sh')openEditBudget();
+  document.getElementById(id).classList.add('open');
+}
+function closeSheet(id){document.getElementById(id).classList.remove('open');}
+function oc(e,id){if(e.target===document.getElementById(id))closeSheet(id);}
+
+// ── CONFIRM ──
+let _cb=null;
+function confirm2(t,m,cb,ok='Delete'){document.getElementById('conf-title').textContent=t;document.getElementById('conf-msg').textContent=m;document.getElementById('conf-ok').textContent=ok;_cb=cb;document.getElementById('confirm-overlay').classList.add('open');}
+function confirmAction(t,m,fn){confirm2(t,m,fn,'Confirm');}
+document.getElementById('conf-ok').onclick=()=>{closeConfirm();if(_cb)_cb();};
+function closeConfirm(){document.getElementById('confirm-overlay').classList.remove('open');}
+
+// ── TOAST ──
+let _tt;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),2300);}
+
+// ── GOOGLE SHEETS SYNC ──
+async function importFromSheet(){
+  const url=document.getElementById('gs-url').value.trim();
+  const role=document.getElementById('gs-role').value;
+  const statusEl=document.getElementById('gs-status');
+  if(!url){toast('Paste a URL first');return;}
+  statusEl.className='gs-status';statusEl.textContent='⏳ Fetching…';
+  try{
+    // Use a CORS proxy since Google Sheets CSV blocks direct fetch from file://
+    const proxyUrl='https://corsproxy.io/?'+encodeURIComponent(url);
+    const res=await fetch(proxyUrl);
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const csv=await res.text();
+    const rows=csv.split('\n').map(r=>r.split(',').map(c=>c.replace(/^"|"$/g,'').trim()));
+    if(rows.length<2){throw new Error('Sheet appears empty');}
+    const headers=rows[0].map(h=>h.toLowerCase().replace(/\s+/g,''));
+    // Map columns flexibly
+    const col=k=>headers.findIndex(h=>h.includes(k));
+    const iName=col('name'), iNum=col('num')||col('#'), iParent=col('parent'),
+          iPhone1=col('phone1')||col('phone'), iPhone2=col('phone2'),
+          iEmail=col('email'), iAllergy=col('allerg')||col('allerg'),
+          iHotel=col('hotel'), iPaid=col('paid'), iPin=col('pin');
+    if(iName<0)throw new Error('No "Name" column found in sheet');
+    const list=role==='player'?ev().players:ev().coaches;
+    let added=0,updated=0;
+    rows.slice(1).forEach(r=>{
+      if(!r[iName]||r[iName].trim()==='')return;
+      const pname=r[iName].trim();
+      const existing=list.find(p=>p.name.toLowerCase()===pname.toLowerCase());
+      const obj={
+        name:pname,
+        num:iNum>=0&&r[iNum]?parseInt(r[iNum])||null:existing?.num||null,
+        parents:iParent>=0?r[iParent]||existing?.parents||'':existing?.parents||'',
+        phone1:iPhone1>=0?r[iPhone1]||existing?.phone1||'':existing?.phone1||'',
+        phone2:iPhone2>=0?r[iPhone2]||existing?.phone2||'':existing?.phone2||'',
+        email:iEmail>=0?r[iEmail]||existing?.email||'':existing?.email||'',
+        allergy:iAllergy>=0?r[iAllergy]||existing?.allergy||'':existing?.allergy||'',
+        hotel:iHotel>=0?r[iHotel]||existing?.hotel||'':existing?.hotel||'',
+        paid:iPaid>=0?(r[iPaid]||'').toLowerCase()==='yes'||existing?.paid||false:existing?.paid||false,
+        pin:iPin>=0?r[iPin]||existing?.pin||'':existing?.pin||'',
+        car:existing?.car||false
+      };
+      if(existing){Object.assign(existing,obj);updated++;}else{list.push(obj);added++;}
+    });
+    save();renderAll();
+    statusEl.className='gs-status ok';
+    statusEl.textContent=`✅ Done — ${added} added, ${updated} updated`;
+    toast(`Imported ${added+updated} people!`);
+  }catch(err){
+    statusEl.className='gs-status err';
+    statusEl.textContent='❌ '+err.message+'. Make sure the sheet is published as CSV (File → Share → Publish to web).';
+  }
+}
+
+function exportToCSV(){
+  const e=ev();
+  const rows=[['Player','#','Role','Attendee Name','Relationship','Phone','Email','Hotel','Has Car','Allergy','Paid','PIN']];
+  [...e.players.map(p=>({...p,_role:'player'})),...e.coaches.map(p=>({...p,_role:'coach'}))].forEach(p=>{
+    const atts=p.attendees||[];
+    if(atts.length){
+      atts.forEach(a=>{
+        rows.push([p.name,p.num||'',p._role,a.name,a.rel||'',a.phone||'',a.email||'',a.hotel||'',a.car?'Yes':'No',p.allergy||'',p.paid?'Yes':'No',p.pin||'']);
+      });
+    } else {
+      rows.push([p.name,p.num||'',p._role,'','','','','','',p.allergy||'',p.paid?'Yes':'No',p.pin||'']);
+    }
+  });
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`${tm().name}_${(ev().short||ev().name).replace(/\s+/g,'_')}_roster.csv`;
+  a.click();
+  toast('CSV downloaded!');
+}
+
+// ── INIT ──
+let pinBuf='';
+if(S.currentUser){hideLock();}
+renderAll();
+</script>
+</body>
+</html>

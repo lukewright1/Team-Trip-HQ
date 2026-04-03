@@ -1,0 +1,17 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backups / old versions
+*_v[0-9]*.html
+*_backup*
+*_old*
+
+# Private — never commit
+PINS.md
