@@ -232,6 +232,9 @@ select.fi{appearance:none;cursor:pointer;}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .sh-handle{width:38px;height:4px;background:var(--border2);border-radius:2px;margin:10px auto 16px;}
 .sh-body{padding:0 18px;}
+.sh-close{display:flex;justify-content:flex-end;margin-bottom:2px;}
+.sh-close-btn{background:none;border:none;cursor:pointer;font-size:22px;color:var(--muted);padding:0 2px;line-height:1;transition:color .15s;}
+.sh-close-btn:active{color:var(--text);}
 .sh-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:15px;}
 .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
 .confirm-overlay.open{display:flex;}
@@ -353,21 +356,21 @@ select.fi{appearance:none;cursor:pointer;}
 
 <!-- ═══ SHEETS ═══ -->
 <div class="overlay" id="team-sheet" onclick="oc(event,'team-sheet')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">My Teams</div><div class="card" id="team-list" style="margin-bottom:11px;"></div><button class="btn btn-ghost btn-full" onclick="openSheet('add-team-sh');closeSheet('team-sheet')">+ New Team</button></div></div></div>
-<div class="overlay" id="add-team-sh" onclick="oc(event,'add-team-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">New Team</div><div class="fl"><div class="fl-lbl">Team Name</div><input class="fi" id="nt-name" placeholder="e.g. 16 Gold"></div><button class="btn btn-primary btn-full" onclick="addTeam()">Create Team</button></div></div></div>
+<div class="overlay" id="add-team-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('add-team-sh')" ">✕</button></div><div class="sh-title">New Team</div><div class="fl"><div class="fl-lbl">Team Name</div><input class="fi" id="nt-name" placeholder="e.g. 16 Gold"></div><button class="btn btn-primary btn-full" onclick="addTeam()">Create Team</button></div></div></div>
 <div class="overlay" id="event-sheet" onclick="oc(event,'event-sheet')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Events</div><div class="card" id="event-list" style="margin-bottom:11px;"></div><div style="display:flex;gap:7px;"><button class="btn btn-ghost" style="flex:1" onclick="openSheet('add-event-sh');closeSheet('event-sheet')">+ New Event</button><button class="btn btn-ghost" style="flex:1" onclick="openSheet('clone-event-sh');closeSheet('event-sheet')">📋 Clone Trip</button></div></div></div></div>
-<div class="overlay" id="add-event-sh" onclick="oc(event,'add-event-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">New Event</div><div class="fl"><div class="fl-lbl">Event Name</div><input class="fi" id="ne-name" placeholder="e.g. Arizona Open 2026"></div><div class="fl"><div class="fl-lbl">Short Label</div><input class="fi" id="ne-short" placeholder="e.g. AZ 2026"></div><div class="fl"><div class="fl-lbl">Dates</div><input class="fi" id="ne-dates" placeholder="e.g. JAN 16–18, 2026"></div><div class="fl"><div class="fl-lbl">Venue</div><input class="fi" id="ne-venue" placeholder="Convention Center, City, State"></div><div class="fl"><div class="fl-lbl">Hotel</div><input class="fi" id="ne-hotel" placeholder="e.g. Sheraton Phoenix Downtown"></div><button class="btn btn-primary btn-full" onclick="addEvent()">Create Event</button></div></div></div>
-<div class="overlay" id="edit-event-sh" onclick="oc(event,'edit-event-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Edit Event Details</div><div class="fl"><div class="fl-lbl">Event Name</div><input class="fi" id="ee-name"></div><div class="fl"><div class="fl-lbl">Short Label</div><input class="fi" id="ee-short"></div><div class="fl"><div class="fl-lbl">Dates</div><input class="fi" id="ee-dates"></div><div class="fl"><div class="fl-lbl">Venue</div><textarea class="fi" id="ee-venue"></textarea></div><div class="fl"><div class="fl-lbl">Arrive By</div><input class="fi" id="ee-arrive"></div><div class="fl"><div class="fl-lbl">Hotel</div><input class="fi" id="ee-hotel"></div><div class="fl"><div class="fl-lbl">EZ Cater Phone</div><input class="fi" id="ee-ezcater-ph" placeholder="800-488-1803"></div><div class="fl"><div class="fl-lbl">Emergency Contact Name</div><input class="fi" id="ee-emerg-name" placeholder="e.g. Coach Pat Eaton"></div><div class="fl"><div class="fl-lbl">Emergency Contact Phone</div><input class="fi" id="ee-emerg-phone" type="tel" placeholder="949-555-0000"></div><div class="fl"><div class="fl-lbl">Venmo Handle (without @)</div><input class="fi" id="ee-venmo" placeholder="e.g. TeamBlues-Treasurer"></div><div class="fl"><div class="fl-lbl">Amount Due per Player ($)</div><input class="fi" id="ee-per-player" type="number" placeholder="50"></div><div class="fl"><div class="fl-lbl">Reminders / Notes</div><textarea class="fi" id="ee-notes"></textarea></div><div class="fl"><div class="fl-lbl">Supply List Notes</div><textarea class="fi" id="ee-supply-notes"></textarea></div><button class="btn btn-primary btn-full" onclick="saveEventDetails()">Save Changes</button></div></div></div>
-<div class="overlay" id="edit-budget-sh" onclick="oc(event,'edit-budget-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Budget Settings</div><div class="fl"><div class="fl-lbl">Amount Due Per Player ($)</div><input class="fi" id="eb-per-player" type="number" placeholder="50"></div><div class="fl"><div class="fl-lbl">Venmo Handle (without @)</div><input class="fi" id="eb-venmo" placeholder="e.g. TeamBlues-Treasurer"></div><button class="btn btn-primary btn-full" onclick="saveBudgetSettings()">Save</button></div></div></div>
-<div class="overlay" id="clone-event-sh" onclick="oc(event,'clone-event-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Clone Trip</div><div style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">Creates a new event with the same roster, duties, and supplies. Meals start fresh.</div><div class="fl"><div class="fl-lbl">New Event Name</div><input class="fi" id="cl-name" placeholder="e.g. Chicago Open 2026"></div><div class="fl"><div class="fl-lbl">Short Label</div><input class="fi" id="cl-short" placeholder="e.g. CHI 2026"></div><div class="fl"><div class="fl-lbl">Dates</div><input class="fi" id="cl-dates" placeholder=""></div><div class="fl"><div class="fl-lbl">Venue</div><input class="fi" id="cl-venue" placeholder=""></div><div class="fl"><div class="fl-lbl">Copy</div><label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="cl-roster" checked> Roster (players &amp; coaches)</label><label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="cl-duties" checked> Duties (unassigned)</label><label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;"><input type="checkbox" id="cl-supplies" checked> Supplies list</label></div><button class="btn btn-gold btn-full" onclick="cloneEvent()">Clone Trip →</button></div></div></div>
+<div class="overlay" id="add-event-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('add-event-sh')" ">✕</button></div><div class="sh-title">New Event</div><div class="fl"><div class="fl-lbl">Event Name</div><input class="fi" id="ne-name" placeholder="e.g. Arizona Open 2026"></div><div class="fl"><div class="fl-lbl">Short Label</div><input class="fi" id="ne-short" placeholder="e.g. AZ 2026"></div><div class="fl"><div class="fl-lbl">Dates</div><input class="fi" id="ne-dates" placeholder="e.g. JAN 16–18, 2026"></div><div class="fl"><div class="fl-lbl">Venue</div><input class="fi" id="ne-venue" placeholder="Convention Center, City, State"></div><div class="fl"><div class="fl-lbl">Hotel</div><input class="fi" id="ne-hotel" placeholder="e.g. Sheraton Phoenix Downtown"></div><button class="btn btn-primary btn-full" onclick="addEvent()">Create Event</button></div></div></div>
+<div class="overlay" id="edit-event-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('edit-event-sh')" ">✕</button></div><div class="sh-title">Edit Event Details</div><div class="fl"><div class="fl-lbl">Event Name</div><input class="fi" id="ee-name"></div><div class="fl"><div class="fl-lbl">Short Label</div><input class="fi" id="ee-short"></div><div class="fl"><div class="fl-lbl">Dates</div><input class="fi" id="ee-dates"></div><div class="fl"><div class="fl-lbl">Venue</div><textarea class="fi" id="ee-venue"></textarea></div><div class="fl"><div class="fl-lbl">Arrive By</div><input class="fi" id="ee-arrive"></div><div class="fl"><div class="fl-lbl">Hotel</div><input class="fi" id="ee-hotel"></div><div class="fl"><div class="fl-lbl">EZ Cater Phone</div><input class="fi" id="ee-ezcater-ph" placeholder="800-488-1803"></div><div class="fl"><div class="fl-lbl">Emergency Contact Name</div><input class="fi" id="ee-emerg-name" placeholder="e.g. Coach Pat Eaton"></div><div class="fl"><div class="fl-lbl">Emergency Contact Phone</div><input class="fi" id="ee-emerg-phone" type="tel" placeholder="949-555-0000"></div><div class="fl"><div class="fl-lbl">Venmo Handle (without @)</div><input class="fi" id="ee-venmo" placeholder="e.g. TeamBlues-Treasurer"></div><div class="fl"><div class="fl-lbl">Amount Due per Player ($)</div><input class="fi" id="ee-per-player" type="number" placeholder="50"></div><div class="fl"><div class="fl-lbl">Reminders / Notes</div><textarea class="fi" id="ee-notes"></textarea></div><div class="fl"><div class="fl-lbl">Supply List Notes</div><textarea class="fi" id="ee-supply-notes"></textarea></div><button class="btn btn-primary btn-full" onclick="saveEventDetails()">Save Changes</button></div></div></div>
+<div class="overlay" id="edit-budget-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('edit-budget-sh')" ">✕</button></div><div class="sh-title">Budget Settings</div><div class="fl"><div class="fl-lbl">Amount Due Per Player ($)</div><input class="fi" id="eb-per-player" type="number" placeholder="50"></div><div class="fl"><div class="fl-lbl">Venmo Handle (without @)</div><input class="fi" id="eb-venmo" placeholder="e.g. TeamBlues-Treasurer"></div><button class="btn btn-primary btn-full" onclick="saveBudgetSettings()">Save</button></div></div></div>
+<div class="overlay" id="clone-event-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('clone-event-sh')" ">✕</button></div><div class="sh-title">Clone Trip</div><div style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">Creates a new event with the same roster, duties, and supplies. Meals start fresh.</div><div class="fl"><div class="fl-lbl">New Event Name</div><input class="fi" id="cl-name" placeholder="e.g. Chicago Open 2026"></div><div class="fl"><div class="fl-lbl">Short Label</div><input class="fi" id="cl-short" placeholder="e.g. CHI 2026"></div><div class="fl"><div class="fl-lbl">Dates</div><input class="fi" id="cl-dates" placeholder=""></div><div class="fl"><div class="fl-lbl">Venue</div><input class="fi" id="cl-venue" placeholder=""></div><div class="fl"><div class="fl-lbl">Copy</div><label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="cl-roster" checked> Roster (players &amp; coaches)</label><label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="cl-duties" checked> Duties (unassigned)</label><label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;"><input type="checkbox" id="cl-supplies" checked> Supplies list</label></div><button class="btn btn-gold btn-full" onclick="cloneEvent()">Clone Trip →</button></div></div></div>
 <div class="overlay" id="person-sheet" onclick="oc(event,'person-sheet')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body" id="person-sh-body"></div></div></div>
-<div class="overlay" id="add-person-sh" onclick="oc(event,'add-person-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title" id="ap-title">Add Player</div><input type="hidden" id="ap-role"><input type="hidden" id="ap-idx" value="-1"><div class="fl"><div class="fl-lbl">Full Name</div><input class="fi" id="ap-name" placeholder="First Last"></div><div class="fl"><div class="fl-lbl">Jersey # (players)</div><input class="fi" id="ap-num" type="number"></div><div class="fl"><div class="fl-lbl">Parent / Contact Name(s)</div><input class="fi" id="ap-parents" placeholder="e.g. Linda & Rob Bae"></div><div class="fl"><div class="fl-lbl">Phone 1</div><input class="fi" id="ap-p1" type="tel"></div><div class="fl"><div class="fl-lbl">Phone 2</div><input class="fi" id="ap-p2" type="tel"></div><div class="fl"><div class="fl-lbl">Email</div><input class="fi" id="ap-email" type="email" placeholder="parent@email.com"></div><div class="fl"><div class="fl-lbl">Allergies</div><input class="fi" id="ap-allergy" placeholder="None"></div><div class="fl"><div class="fl-lbl">Hotel</div><input class="fi" id="ap-hotel"></div><div class="fl"><div class="fl-lbl">Login PIN (4 digits)</div><input class="fi" id="ap-pin" type="tel" maxlength="4" placeholder="e.g. 2312"></div><div style="display:flex;gap:14px;margin-bottom:12px;"><label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" id="ap-paid"> Paid</label><label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" id="ap-car"> Has Car</label></div><button class="btn btn-primary btn-full" onclick="savePerson()">Save</button></div></div></div>
-<div class="overlay" id="add-meal-sh" onclick="oc(event,'add-meal-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title" id="am-title">Add Meal</div><input type="hidden" id="am-idx" value="-1"><div class="fl"><div class="fl-lbl">Date Key (for grouping)</div><input class="fi" id="am-date" placeholder="e.g. 2026-01-17"></div><div class="fl"><div class="fl-lbl">Day Label</div><input class="fi" id="am-daylabel" placeholder="e.g. Saturday Jan 17"></div><div class="fl"><div class="fl-lbl">Meal Type</div><select class="fi" id="am-type"><option>Breakfast</option><option>Lunch</option><option selected>Dinner</option><option>Team Dinner</option><option>Snack</option></select></div><div class="fl"><div class="fl-lbl">Restaurant</div><input class="fi" id="am-rest" placeholder="e.g. Qdoba"></div><div class="fl"><div class="fl-lbl">Time</div><input class="fi" id="am-time" placeholder="e.g. 5:00 PM delivery"></div><div class="fl"><div class="fl-lbl">Location</div><input class="fi" id="am-loc" placeholder="e.g. Convention Center"></div><div class="fl"><div class="fl-lbl">EZ Cater Link</div><input class="fi" id="am-ez" placeholder="https://www.ezcater.com/..."></div><div class="fl"><div class="fl-lbl">Coordinator</div><input class="fi" id="am-vol"></div><div class="fl"><div class="fl-lbl">Estimated Cost ($)</div><input class="fi" id="am-cost" type="number" placeholder="0"></div><div class="fl"><div class="fl-lbl">Notes</div><textarea class="fi" id="am-notes"></textarea></div><button class="btn btn-primary btn-full" onclick="saveMeal()">Save Meal</button></div></div></div>
-<div class="overlay" id="add-order-sh" onclick="oc(event,'add-order-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title" id="ao-title">Add Order</div><input type="hidden" id="ao-meal"><input type="hidden" id="ao-idx" value="-1"><div class="fl"><div class="fl-lbl">Person</div><input class="fi" id="ao-name"></div><div class="fl"><div class="fl-lbl">Jersey #</div><input class="fi" id="ao-num" type="number"></div><div class="fl"><div class="fl-lbl">Order / Item</div><textarea class="fi" id="ao-item"></textarea></div><div class="fl"><div class="fl-lbl">Customization / Notes</div><input class="fi" id="ao-note"></div><div style="display:flex;gap:8px;"><button class="btn btn-primary" style="flex:1" onclick="saveOrder()">Save Order</button><button class="btn btn-danger btn-sm" id="ao-del-btn" style="display:none" onclick="confirmDeleteOrder()">Delete</button></div></div></div></div>
-<div class="overlay" id="add-duty-sh" onclick="oc(event,'add-duty-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title" id="ad-title">Add Duty</div><input type="hidden" id="ad-idx" value="-1"><div class="fl"><div class="fl-lbl">Duty Name</div><input class="fi" id="ad-name"></div><div class="fl"><div class="fl-lbl">Icon (emoji)</div><input class="fi" id="ad-icon" maxlength="4" placeholder="📋"></div><div class="fl"><div class="fl-lbl">Notes / Instructions</div><textarea class="fi" id="ad-notes"></textarea></div><div class="fl"><div class="fl-lbl">Assign To (select multiple)</div><div class="person-check-list" id="duty-person-list"></div></div><button class="btn btn-primary btn-full" style="margin-top:12px;" onclick="saveDuty()">Save Duty</button></div></div></div>
-<div class="overlay" id="add-supply-sh" onclick="oc(event,'add-supply-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Add Supply Item</div><div class="fl"><div class="fl-lbl">Category</div><input class="fi" id="ns-cat" placeholder="e.g. Drinks, Snacks, Fruit"></div><div class="fl"><div class="fl-lbl">Item Name</div><input class="fi" id="ns-name"></div><div class="fl"><div class="fl-lbl">Amount</div><input class="fi" id="ns-amt" placeholder="e.g. 4 cases"></div><button class="btn btn-primary btn-full" onclick="addSupply()">Add Item</button></div></div></div>
-<div class="overlay" id="edit-cat-sh" onclick="oc(event,'edit-cat-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Edit Category</div><div class="fl"><div class="fl-lbl">Category Name</div><input class="fi" id="ec-old-name" type="hidden"><input class="fi" id="ec-new-name" placeholder="Category name"></div><button class="btn btn-primary btn-full" onclick="saveCategory()">Save Category Name</button></div></div></div>
-<div class="overlay" id="add-link-sh" onclick="oc(event,'add-link-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-title">Add Quick Link</div><div class="fl"><div class="fl-lbl">Label</div><input class="fi" id="nl-label"></div><div class="fl"><div class="fl-lbl">URL</div><input class="fi" id="nl-url" type="url" placeholder="https://"></div><div class="fl"><div class="fl-lbl">Icon</div><input class="fi" id="nl-icon" maxlength="4" placeholder="📅"></div><div class="fl"><div class="fl-lbl">Subtitle</div><input class="fi" id="nl-sub"></div><button class="btn btn-primary btn-full" onclick="addLink()">Add Link</button></div></div></div>
-<div class="overlay" id="add-att-sh" onclick="oc(event,'add-att-sh')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body">
+<div class="overlay" id="add-person-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('add-person-sh')" ">✕</button></div><div class="sh-title" id="ap-title">Add Player</div><input type="hidden" id="ap-role"><input type="hidden" id="ap-idx" value="-1"><div class="fl"><div class="fl-lbl">Full Name</div><input class="fi" id="ap-name" placeholder="First Last"></div><div class="fl"><div class="fl-lbl">Jersey # (players)</div><input class="fi" id="ap-num" type="number"></div><div class="fl"><div class="fl-lbl">Parent / Contact Name(s)</div><input class="fi" id="ap-parents" placeholder="e.g. Linda & Rob Bae"></div><div class="fl"><div class="fl-lbl">Phone 1</div><input class="fi" id="ap-p1" type="tel"></div><div class="fl"><div class="fl-lbl">Phone 2</div><input class="fi" id="ap-p2" type="tel"></div><div class="fl"><div class="fl-lbl">Email</div><input class="fi" id="ap-email" type="email" placeholder="parent@email.com"></div><div class="fl"><div class="fl-lbl">Allergies</div><input class="fi" id="ap-allergy" placeholder="None"></div><div class="fl"><div class="fl-lbl">Hotel</div><input class="fi" id="ap-hotel"></div><div class="fl"><div class="fl-lbl">Login PIN (4 digits)</div><input class="fi" id="ap-pin" type="tel" maxlength="4" placeholder="e.g. 2312"></div><div style="display:flex;gap:14px;margin-bottom:12px;"><label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" id="ap-paid"> Paid</label><label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" id="ap-car"> Has Car</label></div><button class="btn btn-primary btn-full" onclick="savePerson()">Save</button></div></div></div>
+<div class="overlay" id="add-meal-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('add-meal-sh')" ">✕</button></div><div class="sh-title" id="am-title">Add Meal</div><input type="hidden" id="am-idx" value="-1"><div class="fl"><div class="fl-lbl">Date Key (for grouping)</div><input class="fi" id="am-date" placeholder="e.g. 2026-01-17"></div><div class="fl"><div class="fl-lbl">Day Label</div><input class="fi" id="am-daylabel" placeholder="e.g. Saturday Jan 17"></div><div class="fl"><div class="fl-lbl">Meal Type</div><select class="fi" id="am-type"><option>Breakfast</option><option>Lunch</option><option selected>Dinner</option><option>Team Dinner</option><option>Snack</option></select></div><label style="display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer;margin-bottom:12px;"><input type="checkbox" id="am-teamdinner" style="width:16px;height:16px;"> Track parent/spectator RSVPs &amp; headcount</label><div class="fl"><div class="fl-lbl">Restaurant</div><input class="fi" id="am-rest" placeholder="e.g. Qdoba"></div><div class="fl"><div class="fl-lbl">Time</div><input class="fi" id="am-time" placeholder="e.g. 5:00 PM delivery"></div><div class="fl"><div class="fl-lbl">Location</div><input class="fi" id="am-loc" placeholder="e.g. Convention Center"></div><div class="fl"><div class="fl-lbl">EZ Cater Link</div><input class="fi" id="am-ez" placeholder="https://www.ezcater.com/..."></div><div class="fl"><div class="fl-lbl">Coordinator</div><input class="fi" id="am-vol"></div><div class="fl"><div class="fl-lbl">Estimated Cost ($)</div><input class="fi" id="am-cost" type="number" placeholder="0"></div><div class="fl"><div class="fl-lbl">Notes</div><textarea class="fi" id="am-notes"></textarea></div><button class="btn btn-primary btn-full" onclick="saveMeal()">Save Meal</button></div></div></div>
+<div class="overlay" id="add-order-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('add-order-sh')" ">✕</button></div><div class="sh-title" id="ao-title">Add Order</div><input type="hidden" id="ao-meal"><input type="hidden" id="ao-idx" value="-1"><div class="fl"><div class="fl-lbl">Person</div><input class="fi" id="ao-name"></div><div class="fl"><div class="fl-lbl">Jersey #</div><input class="fi" id="ao-num" type="number"></div><div class="fl"><div class="fl-lbl">Order / Item</div><textarea class="fi" id="ao-item"></textarea></div><div class="fl"><div class="fl-lbl">Customization / Notes</div><input class="fi" id="ao-note"></div><div style="display:flex;gap:8px;"><button class="btn btn-primary" style="flex:1" onclick="saveOrder()">Save Order</button><button class="btn btn-danger btn-sm" id="ao-del-btn" style="display:none" onclick="confirmDeleteOrder()">Delete</button></div></div></div></div>
+<div class="overlay" id="add-duty-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('add-duty-sh')" ">✕</button></div><div class="sh-title" id="ad-title">Add Duty</div><input type="hidden" id="ad-idx" value="-1"><div class="fl"><div class="fl-lbl">Duty Name</div><input class="fi" id="ad-name"></div><div class="fl"><div class="fl-lbl">Icon (emoji)</div><input class="fi" id="ad-icon" maxlength="4" placeholder="📋"></div><div class="fl"><div class="fl-lbl">Notes / Instructions</div><textarea class="fi" id="ad-notes"></textarea></div><div class="fl"><div class="fl-lbl">Assign To (select multiple)</div><div class="person-check-list" id="duty-person-list"></div></div><button class="btn btn-primary btn-full" style="margin-top:12px;" onclick="saveDuty()">Save Duty</button></div></div></div>
+<div class="overlay" id="add-supply-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('add-supply-sh')" ">✕</button></div><div class="sh-title">Add Supply Item</div><div class="fl"><div class="fl-lbl">Category</div><input class="fi" id="ns-cat" placeholder="e.g. Drinks, Snacks, Fruit"></div><div class="fl"><div class="fl-lbl">Item Name</div><input class="fi" id="ns-name"></div><div class="fl"><div class="fl-lbl">Amount</div><input class="fi" id="ns-amt" placeholder="e.g. 4 cases"></div><button class="btn btn-primary btn-full" onclick="addSupply()">Add Item</button></div></div></div>
+<div class="overlay" id="edit-cat-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('edit-cat-sh')" ">✕</button></div><div class="sh-title">Edit Category</div><div class="fl"><div class="fl-lbl">Category Name</div><input class="fi" id="ec-old-name" type="hidden"><input class="fi" id="ec-new-name" placeholder="Category name"></div><button class="btn btn-primary btn-full" onclick="saveCategory()">Save Category Name</button></div></div></div>
+<div class="overlay" id="add-link-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('add-link-sh')" ">✕</button></div><div class="sh-title">Add Quick Link</div><div class="fl"><div class="fl-lbl">Label</div><input class="fi" id="nl-label"></div><div class="fl"><div class="fl-lbl">URL</div><input class="fi" id="nl-url" type="url" placeholder="https://"></div><div class="fl"><div class="fl-lbl">Icon</div><input class="fi" id="nl-icon" maxlength="4" placeholder="📅"></div><div class="fl"><div class="fl-lbl">Subtitle</div><input class="fi" id="nl-sub"></div><button class="btn btn-primary btn-full" onclick="addLink()">Add Link</button></div></div></div>
+<div class="overlay" id="add-att-sh"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('add-att-sh')" ">✕</button></div>
   <div class="sh-title" id="aa-title">Add Attendee</div>
   <input type="hidden" id="aa-player-idx">
   <input type="hidden" id="aa-player-role">
@@ -390,7 +393,7 @@ select.fi{appearance:none;cursor:pointer;}
     <button class="btn btn-danger btn-sm" id="aa-del-btn" style="display:none" onclick="deleteAttendee()">Remove</button>
   </div>
 </div></div></div>
-<div class="overlay" id="gs-sheet" onclick="oc(event,'gs-sheet')"><div class="sheet"><div class="sh-handle"></div><div class="sh-body">
+<div class="overlay" id="gs-sheet"><div class="sheet"><div class="sh-handle"></div><div class="sh-body"><div class="sh-close"><button class="sh-close-btn" onclick="closeSheet('gs-sheet')" ">✕</button></div>
   <div class="sh-title">Google Sheets Sync</div>
   <div class="gs-how">
     <strong style="color:var(--text)">How to connect your Sheet:</strong><br>
@@ -428,22 +431,32 @@ function migrate(s){
     if(!ev.venmo) ev.venmo='';
     if(!ev.emergencyContact) ev.emergencyContact={name:'',phone:''};
     (ev.duties||[]).forEach(d=>{if(!Array.isArray(d.assignedTo)){d.assignedTo=d.assignedTo?[d.assignedTo]:[];}});
-    // add attendees array to each player/coach if missing
-    [...(ev.players||[]),...(ev.coaches||[])].forEach(p=>{
+    // add attendees to players only (not coaches — coaches have no parents)
+    (ev.players||[]).forEach(p=>{
       if(!p.attendees) p.attendees=[];
-      // migrate old phone1/phone2/parents into first attendee if attendees empty
       if(p.attendees.length===0 && (p.phone1||p.phone2||p.parents)){
         const names=(p.parents||'').split('&').map(n=>n.trim()).filter(Boolean);
+        // car goes on the attendee who has it, not the player
         if(names[0]){p.attendees.push({name:names[0],rel:'Parent',phone:p.phone1||'',email:p.email||'',hotel:p.hotel||'',car:p.car||false});}
         if(names[1]){p.attendees.push({name:names[1],rel:'Parent',phone:p.phone2||'',email:'',hotel:'',car:false});}
-        else if(p.phone2 && names[0]){p.attendees[0].phone2=p.phone2;}
+        else if(p.phone2&&names[0]){p.attendees[0].phone2=p.phone2;}
+        p.car=false; // car now lives on the attendee
       }
+    });
+    // coaches: just ensure attendees array exists but don't populate it
+    (ev.coaches||[]).forEach(c=>{
+      if(!c.attendees) c.attendees=[];
+    });
+    // meals: ensure teamDinner flag and attendeeCount exist
+    (ev.meals||[]).forEach(m=>{
+      if(m.isTeamDinner===undefined) m.isTeamDinner=(m.type==='Team Dinner');
+      if(!m.dinnerRSVPs) m.dinnerRSVPs={};
     });
   }));
 }
 migrate(S);
 const ADMIN_PIN='0000';
-const APP_VERSION='1.0.0';
+const APP_VERSION='1.1.1';
 let pinBuf='';
 function save(){try{localStorage.setItem('triphq1',JSON.stringify(S));}catch(e){}}
 function ev(){return S.teams[S.activeTeam].events[S.activeEvent];}
@@ -579,7 +592,6 @@ function renderInfo(){
 // ── MEALS ──
 function renderMeals(){
   const e=ev(),meals=e.meals||[];
-  const total=e.players.length+e.coaches.length;
   const byDate={},dateOrder=[];
   meals.forEach((m,mi)=>{
     const k=m.date||m.dayLabel||'Other';
@@ -589,18 +601,74 @@ function renderMeals(){
   let html='';
   dateOrder.forEach((dk,di)=>{
     const dg=byDate[dk];
-    const dayMissing=dg.meals.reduce((s,{m})=>s+(m.ezCaterLink?Math.max(0,total-m.orders.length):0),0);
+    // missing = people with no order entry OR empty item on EZ cater meals
+    const dayMissing=dg.meals.reduce((s,{m})=>{
+      if(!m.ezCaterLink) return s;
+      const allPeople=[...e.players,...e.coaches];
+      const missing=allPeople.filter(p=>!m.orders.find(o=>o.name===p.name&&o.item&&o.item.trim())).length;
+      return s+missing;
+    },0);
     html+=`<div class="day-group"><div class="day-header" onclick="toggleDay(this)"><span class="day-label">${dg.label}</span><span class="day-meta">${dg.meals.length} meal${dg.meals.length>1?'s':''}</span>${dayMissing>0?`<span class="badge r">${dayMissing} missing</span>`:'<span class="badge g">Complete</span>'}<span class="day-chevron ${di===0?'open':''}">▼</span></div><div class="day-body ${di===0?'open':''}">`;
     dg.meals.forEach(({m,mi})=>{
-      const sub=m.orders.length,miss=m.ezCaterLink?Math.max(0,total-sub):0;
-      html+=`<div class="meal-item"><div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;"><span class="meal-type-pill">${m.type}</span><span style="font-size:14px;font-weight:700;flex:1">${m.restaurant}</span>${S.adminOn?`<button class="btn btn-ghost btn-sm" onclick="openEditMeal(${mi})">Edit</button>`:''}</div>`;
+      const allPeople=[...e.players,...e.coaches];
+      const total=allPeople.length;
+      const entered=m.orders.filter(o=>o.item&&o.item.trim()).length;
+      const missing=m.ezCaterLink?allPeople.filter(p=>!m.orders.find(o=>o.name===p.name&&o.item&&o.item.trim())).length:0;
+
+      html+=`<div class="meal-item">`;
+      html+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;">
+        <span class="meal-type-pill">${m.type}</span>
+        <span style="font-size:14px;font-weight:700;flex:1">${m.restaurant}</span>
+        ${S.adminOn?`<button class="btn btn-ghost btn-sm" onclick="openEditMeal(${mi})">Edit</button>`:''}
+      </div>`;
+
       if(m.time||m.loc)html+=`<div style="font-size:11px;color:var(--muted);margin-bottom:8px;display:flex;gap:12px;">${m.time?`<span>⏰ ${m.time}</span>`:''} ${m.loc?`<span>📍 ${m.loc}</span>`:''}</div>`;
       if(m.notes)html+=`<div style="font-size:12px;color:rgba(232,240,255,.5);line-height:1.5;padding:8px 10px;background:rgba(255,255,255,.03);border-radius:8px;margin-bottom:8px">${m.notes}</div>`;
-      if(m.ezCaterLink){
-        html+=`<div class="order-stats"><div class="stat-chip s-b"><div class="sn">${total}</div><div class="sl">Expected</div></div><div class="stat-chip s-g"><div class="sn">${sub}</div><div class="sl">Entered</div></div><div class="stat-chip ${miss>0?'s-r':'s-g'}"><div class="sn">${miss}</div><div class="sl">Missing</div></div></div>`;
-        html+=`<a class="ezcater-btn" href="${m.ezCaterLink}" target="_blank"><div class="ec-main"><div class="ec-title">🛒 Open on EZ Cater</div><div class="ec-sub">Coordinator link — ${m.restaurant}</div></div><span class="ec-arrow">›</span></a>`;
+
+      // Coordinator card — find their phone from attendees
+      if(m.volunteer){
+        let volPhone='';
+        e.players.forEach(p=>(p.attendees||[]).forEach(a=>{if(a.name===m.volunteer)volPhone=a.phone||'';}));
+        e.coaches.forEach(c=>{if(c.name===m.volunteer)volPhone=c.phone1||'';});
+        html+=`<div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:10px;padding:9px 12px;margin-bottom:9px;">
+          <span style="font-size:16px">👤</span>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:1px">Coordinator</div>
+            <div style="font-size:13px;font-weight:700">${m.volunteer}</div>
+          </div>
+          ${volPhone?`<a href="tel:${volPhone.replace(/\D/g,'')}" class="btn btn-ghost btn-sm" style="color:var(--blue);flex-shrink:0">Call</a>`:''}
+        </div>`;
       }
-      if(m.volunteer)html+=`<div style="font-size:11px;color:var(--muted);margin-bottom:8px;">👤 <strong>Coordinator:</strong> ${m.volunteer}</div>`;
+
+      if(m.ezCaterLink){
+        html+=`<div class="order-stats">
+          <div class="stat-chip s-b"><div class="sn">${total}</div><div class="sl">Expected</div></div>
+          <div class="stat-chip s-g"><div class="sn">${entered}</div><div class="sl">Entered</div></div>
+          <div class="stat-chip ${missing>0?'s-r':'s-g'}"><div class="sn">${missing}</div><div class="sl">Missing</div></div>
+        </div>`;
+        html+=`<a class="ezcater-btn" href="${m.ezCaterLink}" target="_blank"><div class="ec-main"><div class="ec-title">🛒 Open on EZ Cater</div><div class="ec-sub">Coordinator order link — ${m.restaurant}</div></div><span class="ec-arrow">›</span></a>`;
+      }
+
+      // Team dinner headcount
+      if(m.isTeamDinner||m.type==='Team Dinner'){
+        const rsvps=m.dinnerRSVPs||{};
+        const attendeeList=[];
+        e.players.forEach(p=>(p.attendees||[]).forEach(a=>attendeeList.push({name:a.name,key:`p_${p.name}_${a.name}`})));
+        e.coaches.forEach(c=>attendeeList.push({name:c.name+' (Coach)',key:`c_${c.name}`}));
+        const yesCount=Object.values(rsvps).filter(v=>v==='yes').length;
+        html+=`<div style="background:var(--surface2);border-radius:10px;padding:11px 13px;margin-bottom:9px;">
+          <div style="display:flex;align-items:center;margin-bottom:8px;">
+            <span style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--gold);flex:1">🎉 Team Dinner RSVPs</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--green);font-weight:700">${yesCount} attending</span>
+          </div>
+          ${attendeeList.map(a=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);">
+            <span style="font-size:13px;flex:1">${a.name}</span>
+            <button onclick="toggleRSVP(${mi},'${a.key}','yes')" style="padding:3px 10px;border-radius:20px;border:1px solid;cursor:pointer;font-size:11px;font-weight:700;font-family:'Barlow',sans-serif;background:${rsvps[a.key]==='yes'?'var(--green)':'transparent'};color:${rsvps[a.key]==='yes'?'#fff':'var(--muted)'};border-color:${rsvps[a.key]==='yes'?'var(--green)':'var(--border2)'}">Yes</button>
+            <button onclick="toggleRSVP(${mi},'${a.key}','no')" style="padding:3px 10px;border-radius:20px;border:1px solid;cursor:pointer;font-size:11px;font-weight:700;font-family:'Barlow',sans-serif;background:${rsvps[a.key]==='no'?'var(--red)':'transparent'};color:${rsvps[a.key]==='no'?'#fff':'var(--muted)'};border-color:${rsvps[a.key]==='no'?'var(--red)':'var(--border2)'}">No</button>
+          </div>`).join('')}
+        </div>`;
+      }
+
       if(m.orders.length||S.adminOn){
         html+=`<div class="orders-card">`;
         html+=`<div class="row-sep"><span>Players (${e.players.length})</span></div>`;
@@ -608,7 +676,8 @@ function renderMeals(){
         html+=`<div class="row-sep"><span>Coaches (${e.coaches.length})</span></div>`;
         e.coaches.forEach(p=>{const ord=m.orders.find(o=>o.name===p.name);html+=oRow(p,ord,mi,m,S.adminOn,'coach');});
         html+=`</div>`;
-      } else if(!m.ezCaterLink){html+=`<div style="font-size:12px;color:var(--muted);padding:4px 0;font-style:italic">Group meal — no individual orders</div>`;}
+      } else if(!m.ezCaterLink&&!m.isTeamDinner){html+=`<div style="font-size:12px;color:var(--muted);padding:4px 0;font-style:italic">Group meal — no individual orders</div>`;}
+
       if(S.adminOn)html+=`<div style="display:flex;gap:7px;margin-top:8px;"><button class="btn btn-ghost btn-sm" style="flex:1" onclick="openAddOrder(${mi})">+ Add Order</button><button class="btn btn-danger btn-sm" onclick="confirmDeleteMeal(${mi})">Delete Meal</button></div>`;
       html+=`</div>`;
     });
@@ -617,6 +686,12 @@ function renderMeals(){
   if(!meals.length)html='<div class="empty-msg">No meals added yet.</div>';
   document.getElementById('days-list').innerHTML=html;
   document.getElementById('admin-meal-add').style.display=S.adminOn?'block':'none';
+}
+function toggleRSVP(mi,key,val){
+  const m=ev().meals[mi];
+  if(!m.dinnerRSVPs) m.dinnerRSVPs={};
+  m.dinnerRSVPs[key]=m.dinnerRSVPs[key]===val?'':val;
+  save(); renderMeals();
 }
 function oRow(p,ord,mi,m,admin,role){
   const oi=ord?m.orders.indexOf(ord):-1;
@@ -636,7 +711,16 @@ function renderBudget(){
   document.getElementById('budget-expenses').innerHTML=(e.meals||[]).map(m=>`<div class="budget-row-item"><div class="bri-left"><div class="bri-name">${m.dayLabel} — ${m.restaurant}</div><div class="bri-sub">${m.type}${m.volunteer?' · '+m.volunteer:''}</div></div><div class="bri-amt" style="color:var(--red)">–$${(m.estimatedCost||0).toLocaleString()}</div></div>`).join('')||'<div class="empty-msg">No meals</div>';
   const pb=document.getElementById('paid-badge');
   pb.textContent=`${paid}/${e.players.length}`;pb.className=`badge ${paid===e.players.length?'g':'a'}`;
-  document.getElementById('pay-grid').innerHTML=e.players.map((p,i)=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 11px;display:flex;align-items:center;gap:7px;${S.adminOn?'cursor:pointer':''}" onclick="${S.adminOn?`togglePaid(${i})`:''}" ><div style="width:8px;height:8px;border-radius:50%;background:${p.paid?'var(--green)':'var(--amber)'};flex-shrink:0;"></div><div><div style="font-size:12px;font-weight:600">${p.name.split(' ')[0]} ${p.name.split(' ').slice(-1)}</div><div style="font-size:10px;color:var(--muted)">${p.paid?'✓ Paid':'Pending'}</div></div></div>`).join('');
+  // Payment grid — always tappable from budget page (no admin mode required)
+  document.getElementById('pay-grid').innerHTML=e.players.map((p,i)=>`
+    <div style="background:var(--surface);border:1px solid ${p.paid?'rgba(34,197,94,.3)':'var(--border)'};border-radius:var(--radius-sm);padding:11px 13px;display:flex;align-items:center;gap:9px;cursor:pointer;transition:all .15s;" onclick="togglePaid(${i})">
+      <div style="width:10px;height:10px;border-radius:50%;background:${p.paid?'var(--green)':'var(--amber)'};flex-shrink:0;"></div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name.split(' ')[0]} ${p.name.split(' ').slice(-1)[0]}</div>
+        <div style="font-size:11px;color:${p.paid?'var(--green)':'var(--amber)'};font-weight:600;margin-top:2px">${p.paid?'✓ Paid':'Pending'}</div>
+      </div>
+      <span style="font-size:18px">${p.paid?'✅':'⏳'}</span>
+    </div>`).join('');
 }
 
 // ── PLAYERS (with inline attendees) ──
@@ -647,30 +731,32 @@ function renderPlayers(){
     const atts=p.attendees||[];
     const ini=(p.name||'?').split(' ').filter(w=>w).map(w=>w[0]).join('').slice(0,2).toUpperCase();
     const myDuties=(e.duties||[]).filter(d=>(d.assignedTo||[]).some(a=>atts.some(at=>at.name&&a.includes(at.name))||a.includes(p.name)));
-    const hasCar=atts.some(a=>a.car);
+    const hasCar=atts.some(a=>a.car); // car lives on attendee
     const allergy=p.allergy&&p.allergy!=='None'&&p.allergy;
+    const isCoach=role==='coach';
 
     let html=`<div class="plyr-card">
       <div class="plyr-hdr">
-        <div class="plyr-num">${p.num!=null?p.num:role==='coach'?'🏅':'—'}</div>
+        <div class="plyr-num">${p.num!=null?p.num:isCoach?'🏅':'—'}</div>
         <div class="plyr-info">
           <div class="plyr-name">${p.name}</div>
           <div class="plyr-sub">
             ${allergy?`<span style="color:var(--red)">⚠ ${p.allergy}</span>`:''}
-            ${hasCar?'<span style="color:#60a5fa">🚗 Has car</span>':''}
+            ${hasCar?'<span style="color:#60a5fa">🚗 Car</span>':''}
             ${myDuties.length?`<span style="color:var(--gold)">${myDuties.length} duty${myDuties.length>1?'s':''}</span>`:''}
           </div>
         </div>
         <div class="plyr-badges">
-          ${p.paid?'<span class="badge g">Paid</span>':'<span class="badge a">Pending</span>'}
+          ${!isCoach?(p.paid?'<span class="badge g">Paid</span>':'<span class="badge a">Pending</span>'):''}
           ${S.adminOn?`<button class="btn btn-ghost btn-sm" style="font-size:10px;padding:3px 8px" onclick="openEditPersonSheet(${idx},'${role}')">Edit</button>`:''}
         </div>
       </div>`;
 
-    // Attendees
-    if(atts.length||S.adminOn){
+    // Players always show attendee section; coaches only if they have attendees or admin is adding
+    const showAttSection = !isCoach || atts.length > 0 || S.adminOn;
+    if(showAttSection){
       html+=`<div class="attendees-section">`;
-      html+=`<div class="attendee-lbl">${role==='player'?'Parents & Spectators':'Contacts'}</div>`;
+      html+=`<div class="attendee-lbl">${isCoach?'Team Dinner +1s':'Parents & Spectators'}</div>`;
       atts.forEach((a,ai)=>{
         const aini=(a.name||'?').split(' ').filter(w=>w).map(w=>w[0]).join('').slice(0,2).toUpperCase();
         html+=`<div class="attendee-row">
@@ -689,9 +775,10 @@ function renderPlayers(){
         </div>`;
       });
       if(S.adminOn){
+        const btnLabel=isCoach?'＋ Add +1 / guest':'＋ Add parent / spectator';
         html+=`<div class="add-att-btn" onclick="openAddAttendee(${idx},'${role}')">
           <span style="font-size:18px;color:var(--muted)">＋</span>
-          <span>Add parent / spectator</span>
+          <span>${isCoach?'Add +1 / guest':'Add parent / spectator'}</span>
         </div>`;
       }
       html+=`</div>`;
@@ -812,7 +899,12 @@ function renderSupplies(){
     html+=`<div class="card" style="padding:2px 0;margin-bottom:6px;">`;
     items.filter(s=>s.cat===cat).forEach(s=>{
       const i=items.indexOf(s);
-      html+=`<div class="supply-row"><button class="supply-chk ${s.done?'done':''}" onclick="toggleSupply(${i})">${s.done?'✓':''}</button><span class="supply-n ${s.done?'done':''}">${s.name}</span><span class="supply-a">${s.amt}</span>${S.adminOn?`<button class="btn btn-danger btn-sm" onclick="confirmAction('Remove item?','',()=>{ev().supplies.splice(${i},1);save();renderSupplies();})">✕</button>`:''}</div>`;
+      html+=`<div class="supply-row">
+        <button class="supply-chk ${s.done?'done':''}" onclick="toggleSupply(${i})">${s.done?'✓':''}</button>
+        <span class="supply-n ${s.done?'done':''}" style="font-size:14px">${s.name}</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--gold);background:var(--surface2);border-radius:6px;padding:3px 10px;white-space:nowrap;flex-shrink:0">${s.amt}</span>
+        ${S.adminOn?`<button class="btn btn-danger btn-sm" onclick="confirmAction('Remove item?','',()=>{ev().supplies.splice(${i},1);save();renderSupplies();})">✕</button>`:''}
+      </div>`;
     });
     html+=`</div>`;
   });
@@ -905,8 +997,8 @@ function savePerson(){
 function togglePaid(i){ev().players[i].paid=!ev().players[i].paid;save();renderBudget();renderDash();renderPlayers();}
 
 // ── MEAL ACTIONS ──
-function openEditMeal(mi){const m=ev().meals[mi];document.getElementById('am-idx').value=mi;document.getElementById('am-title').textContent='Edit Meal';['am-date','am-daylabel','am-rest','am-time','am-loc','am-ez','am-vol','am-notes'].forEach((id,n)=>{const k=['date','dayLabel','restaurant','time','loc','ezCaterLink','volunteer','notes'][n];document.getElementById(id).value=m[k]||'';});document.getElementById('am-type').value=m.type||'Dinner';document.getElementById('am-cost').value=m.estimatedCost||0;openSheet('add-meal-sh');}
-function saveMeal(){const idx=parseInt(document.getElementById('am-idx').value);const obj={date:document.getElementById('am-date').value.trim(),dayLabel:document.getElementById('am-daylabel').value.trim()||document.getElementById('am-date').value.trim(),type:document.getElementById('am-type').value,restaurant:document.getElementById('am-rest').value.trim(),time:document.getElementById('am-time').value.trim(),loc:document.getElementById('am-loc').value.trim(),ezCaterLink:document.getElementById('am-ez').value.trim(),volunteer:document.getElementById('am-vol').value.trim(),estimatedCost:parseFloat(document.getElementById('am-cost').value)||0,notes:document.getElementById('am-notes').value.trim(),orders:idx>=0?ev().meals[idx].orders:[]};if(idx>=0)ev().meals[idx]={...obj,orders:ev().meals[idx].orders};else ev().meals.push(obj);document.getElementById('am-idx').value=-1;document.getElementById('am-title').textContent='Add Meal';save();closeSheet('add-meal-sh');renderAll();toast('Meal saved!');}
+function openEditMeal(mi){const m=ev().meals[mi];document.getElementById('am-idx').value=mi;document.getElementById('am-title').textContent='Edit Meal';['am-date','am-daylabel','am-rest','am-time','am-loc','am-ez','am-vol','am-notes'].forEach((id,n)=>{const k=['date','dayLabel','restaurant','time','loc','ezCaterLink','volunteer','notes'][n];document.getElementById(id).value=m[k]||'';});document.getElementById('am-type').value=m.type||'Dinner';document.getElementById('am-cost').value=m.estimatedCost||0;document.getElementById('am-teamdinner').checked=m.isTeamDinner||m.type==='Team Dinner';openSheet('add-meal-sh');}
+function saveMeal(){const idx=parseInt(document.getElementById('am-idx').value);const type=document.getElementById('am-type').value;const isTeamDinner=document.getElementById('am-teamdinner').checked||type==='Team Dinner';const obj={date:document.getElementById('am-date').value.trim(),dayLabel:document.getElementById('am-daylabel').value.trim()||document.getElementById('am-date').value.trim(),type,restaurant:document.getElementById('am-rest').value.trim(),time:document.getElementById('am-time').value.trim(),loc:document.getElementById('am-loc').value.trim(),ezCaterLink:document.getElementById('am-ez').value.trim(),volunteer:document.getElementById('am-vol').value.trim(),estimatedCost:parseFloat(document.getElementById('am-cost').value)||0,notes:document.getElementById('am-notes').value.trim(),isTeamDinner,dinnerRSVPs:idx>=0?(ev().meals[idx].dinnerRSVPs||{}):{},orders:idx>=0?ev().meals[idx].orders:[]};if(idx>=0)ev().meals[idx]={...obj,orders:ev().meals[idx].orders,dinnerRSVPs:ev().meals[idx].dinnerRSVPs||{}};else ev().meals.push(obj);document.getElementById('am-idx').value=-1;document.getElementById('am-title').textContent='Add Meal';save();closeSheet('add-meal-sh');renderAll();toast('Meal saved!');}
 function confirmDeleteMeal(mi){confirm2('Delete this meal?','All entered orders for this meal will be removed.',()=>{ev().meals.splice(mi,1);save();renderAll();toast('Deleted');});}
 function openAddOrder(mi){openOrderSheet(mi,null,null,-1);}
 function openOrderFor(mi,name,num){openOrderSheet(mi,name,num,-1);}
