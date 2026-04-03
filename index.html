@@ -441,6 +441,7 @@ function migrate(s){
 }
 migrate(S);
 const ADMIN_PIN='0000';
+let pinBuf='';
 function save(){try{localStorage.setItem('triphq1',JSON.stringify(S));}catch(e){}}
 function ev(){return S.teams[S.activeTeam].events[S.activeEvent];}
 function tm(){return S.teams[S.activeTeam];}
@@ -1043,7 +1044,6 @@ function exportToCSV(){
 }
 
 // ── INIT ──
-let pinBuf='';
 if(S.currentUser){hideLock();}
 renderAll();
 </script>
