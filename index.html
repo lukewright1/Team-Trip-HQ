@@ -278,6 +278,7 @@ select.fi{appearance:none;cursor:pointer;}
     </div>
     <div style="text-align:center;margin-top:12px;"><button class="btn btn-ghost btn-sm" onclick="showAdminHint()">Admin / Coach →</button></div>
     <div class="session-bar">Your login is saved on this device.<br>You won't need to re-enter next time.</div>
+    <div style="text-align:center;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted2);letter-spacing:.5px;" id="login-version"></div>
   </div>
 </div>
 
@@ -286,6 +287,7 @@ select.fi{appearance:none;cursor:pointer;}
   <button class="hdr-btn" onclick="openSheet('team-sheet')"><span id="hdr-tn">—</span><span class="hdr-chevron">▼</span></button>
   <button class="hdr-btn" onclick="openSheet('event-sheet')"><span id="hdr-en">—</span><span class="hdr-chevron">▼</span></button>
   <div class="hdr-spacer"></div>
+  <span id="version-badge" style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted2);letter-spacing:.5px;padding:2px 6px;border:1px solid var(--border);border-radius:4px;white-space:nowrap;"></span>
   <button id="admin-toggle" onclick="toggleAdmin()">Edit</button>
   <button id="user-btn" onclick="handleUserBtn()">👤 <span id="user-label">Login</span></button>
 </div>
@@ -441,6 +443,7 @@ function migrate(s){
 }
 migrate(S);
 const ADMIN_PIN='0000';
+const APP_VERSION='1.0.0';
 let pinBuf='';
 function save(){try{localStorage.setItem('triphq1',JSON.stringify(S));}catch(e){}}
 function ev(){return S.teams[S.activeTeam].events[S.activeEvent];}
@@ -488,6 +491,7 @@ function switchPage(id,btn){
 function renderHeader(){
   document.getElementById('hdr-tn').textContent=tm().name;
   document.getElementById('hdr-en').textContent=ev().short||ev().name;
+  document.getElementById('version-badge').textContent='v'+APP_VERSION;
   const isAdmin=S.adminOn;
   const at=document.getElementById('admin-toggle');
   at.style.display=S.currentUser?.role==='admin'?'block':'none';
@@ -763,6 +767,7 @@ function deleteAttendee(){
 }
 
 // ── DUTIES ──
+function renderDuties(){
   const duties=ev().duties||[];
   const e=ev();
   function dutyCard(d,i){
@@ -1044,6 +1049,7 @@ function exportToCSV(){
 }
 
 // ── INIT ──
+document.getElementById('login-version').textContent='Team Trip HQ v'+APP_VERSION;
 if(S.currentUser){hideLock();}
 renderAll();
 </script>
